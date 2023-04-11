@@ -1,73 +1,56 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
-
-```bash
-$ npm install
-```
-
-## Running the app
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+<h1>Bookease</h1>
+<p>Bookease es un repositorio para la gestión de reservas en distintos tipos de negocios. Este proyecto utiliza NestJS y MongoDB como stack principal y se encuentra en desarrollo. Está destinado únicamente para fines de práctica y aprendizaje.</p>
+<h2>Índice</h2>
+<ol>
+    <li><a href="#requisitos-previos">Requisitos previos</a></li>
+    <li><a href="#instalación">Instalación</a></li>
+    <li><a href="#uso">Uso</a></li>
+    <li><a href="#contribuciones">Contribuciones</a></li>
+    <li><a href="#licencia">Licencia</a></li>
+</ol>
+<h2 id="requisitos-previos">Requisitos previos</h2>
+<p>Para ejecutar este proyecto en su entorno local, debe tener instalado lo siguiente:</p>
+<ul>
+    <li>Node.js (versión recomendada 14.x o superior)</li>
+    <li>MongoDB</li>
+    <li>npm o yarn (recomendado)</li>
+</ul>
+<h2 id="instalación">Instalación</h2>
+<p>Siga los siguientes pasos para instalar el proyecto en su entorno local:</p>
+<ol>
+    <li>Clone el repositorio:</li>
+</ol>
+<pre><code>git clone https://github.com/antonio-112/bookease.git
+</code></pre>
+<ol start="2">
+    <li>Cambie al directorio del proyecto:</li>
+</ol>
+<pre><code>cd bookease
+</code></pre>
+<ol start="3">
+    <li>Instale las dependencias:</li>
+</ol>
+<pre><code>npm install
+</code></pre>
+<p>o si está utilizando yarn:</p>
+<pre><code>yarn
+</code></pre>
+<h2 id="uso">Uso</h2>
+<p>Para ejecutar el proyecto en modo de desarrollo, ejecute el siguiente comando:</p>
+<pre><code>npm run start:dev
+</code></pre>
+<p>o si está utilizando yarn:</p>
+<pre><code>yarn start:dev
+</code></pre>
+<p>El servidor se iniciará en el puerto 3000 por defecto. Puede acceder a la API en <code>http://localhost:3000</code>.</p>
+<h2 id="contribuciones">Contribuciones</h2>
+<p>Este proyecto es de código abierto y las contribuciones son bienvenidas. Si desea contribuir, siga estos pasos:</p>
+<ol>
+    <li>Realice un "fork" del repositorio</li>
+    <li>Clone su fork en su entorno local</li>
+    <li>Cree una nueva rama con un nombre descriptivo relacionado con la característica o corrección que desea aportar</li>
+    <li>Realice sus cambios y envíelos</li>
+    <li>Abra una solicitud de extracción (pull request) desde su repositorio al repositorio original</li>
+</ol>
+<h2 id="licencia">Licencia</h2>
+<p>Este proyecto está licenciado bajo la Licencia MIT. Siéntase libre de usar, modificar y distribuir el código siguiendo los términos de la licencia.</p>
