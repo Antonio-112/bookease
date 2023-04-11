@@ -6,4 +6,9 @@ export interface IBookingRepository {
   findById(id: string): Promise<Booking>;
   update(id: string, booking: Booking): Promise<Booking>;
   delete(id: string): Promise<void>;
+  findByHairdresserAndTimeRange(
+    hairdresser: string,
+    startTime: Date,
+    endTime: Date,
+  ): Promise<Booking[]>;
 }
