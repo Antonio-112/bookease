@@ -1,5 +1,16 @@
 src/
 ├── application/
+│ ├── auth/
+│ │ ├── dto/
+│ │ │ ├── login.dto.ts
+│ │ │ └── register.dto.ts
+│ │ ├── guards/
+│ │ │ ├── jwt-auth.guard.ts
+│ │ ├── strategies/
+│ │ │ ├── jwt.strategy.ts
+│ │ ├── auth.module.ts
+│ │ ├── auth.service.ts
+│ │ └── auth.controller.ts
 │ ├── booking/
 │ │ ├── dto/
 │ │ │ ├── create-booking.dto.ts

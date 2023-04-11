@@ -17,17 +17,58 @@ export class BookingService {
     private readonly userRepository: IUserRepository,
   ) {}
 
+  async isTimeSlotAvailable(date: Date, hairdresser: string): Promise<boolean> {
+    const selectedDate = new Date(date);
+
+    const startTime = new Date(date);
+    startTime.setHours(9, 0, 0, 0);
+    const endTime = new Date(date);
+    endTime.setHours(18, 0, 0, 0);
+
+    const selectedTime = selectedDate.getTime();
+
+    if (
+      selectedTime < startTime.getTime() ||
+      selectedTime >= endTime.getTime()
+    ) {
+      return false;
+    }
+
+    for (
+      let time = startTime;
+      time < endTime;
+      time.setHours(time.getHours() + 3)
+    ) {
+      const nextTime = new Date(time);
+      nextTime.setHours(time.getHours() + 3);
+
+      if (selectedTime >= time.getTime() && selectedTime < nextTime.getTime()) {
+        const bookings =
+          await this.bookingRepository.findByHairdresserAndTimeRange(
+            hairdresser,
+            time,
+            nextTime,
+          );
+        return bookings.length === 0;
+      }
+    }
+
+    return false;
+  }
+
   async createBooking(command: CreateBookingCommand): Promise<Booking> {
-    // Check if the user exists
     const user = await this.userRepository.findByName(
       command.createBookingDto.name,
     );
     if (!user) {
       throw new Error('User not found');
     }
+
     const { name, date, hairdresser, status } = command.createBookingDto;
-    // Add your business logic for creating a booking
-    // check if the time slot is available, etc.
+
+    if (!(await this.isTimeSlotAvailable(date, hairdresser))) {
+      throw new Error('Time slot is not available');
+    }
 
     const booking = new Booking(null, name, date, hairdresser, status);
 
@@ -43,7 +84,6 @@ export class BookingService {
   }
 
   async updateBooking(command: UpdateBookingCommand): Promise<Booking> {
-    // Check if the user exists
     const user = await this.userRepository.findByName(
       command.updateBookingDto.name,
     );
@@ -51,10 +91,12 @@ export class BookingService {
       throw new Error('User not found');
     }
 
-    // Add your business logic for updating a booking
-    // check if the time slot is available, etc.
-
     const { name, date, hairdresser, status } = command.updateBookingDto;
+
+    if (!(await this.isTimeSlotAvailable(date, hairdresser))) {
+      throw new Error('Time slot is not available');
+    }
+
     const booking = new Booking(command.id, name, date, hairdresser, status);
 
     return this.bookingRepository.update(command.id, booking);
