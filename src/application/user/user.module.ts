@@ -20,5 +20,11 @@ import { UserRepository } from '../../infrastructure/mongo/users/user.repository
       useClass: UserRepository,
     },
   ],
+  exports: [
+    {
+      provide: 'IUserRepository',
+      useClass: UserRepository,
+    },
+  ],
 })
 export class UserModule {}
