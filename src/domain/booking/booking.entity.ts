@@ -5,5 +5,7 @@ export class Booking {
     public readonly date: Date,
     public readonly hairdresser: string,
     public readonly status: string,
-  ) {}
+  ) {
+    this.date = date;
+  }
 }
