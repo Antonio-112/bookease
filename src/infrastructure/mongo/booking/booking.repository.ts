@@ -21,6 +21,10 @@ export class BookingRepository implements IBookingRepository {
     return await this.bookingModel.findById(id).exec();
   }
 
+  async findByName(name: string): Promise<Booking> {
+    return await this.bookingModel.findOne({ name }).exec();
+  }
+
   async update(id: string, booking: Booking): Promise<Booking> {
     return await this.bookingModel
       .findByIdAndUpdate(id, booking, { new: true })
