@@ -1,15 +1,21 @@
 import {
   Controller,
-  Get,
   Post,
   Body,
+  Get,
   Param,
   Put,
   Delete,
+  Logger,
 } from '@nestjs/common';
-import { Logger } from '@nestjs/common';
-import { Booking } from '../../domain/booking/booking.entity';
 import { BookingService } from './booking.service';
+import { CreateBookingDto } from './dtos/create-booking.dto';
+import { UpdateBookingDto } from './dtos/update-booking.dto';
+import { CreateBookingCommand } from './commands/create-booking.command';
+import { UpdateBookingCommand } from './commands/update-booking.command';
+import { DeleteBookingCommand } from './commands/delete-booking.command';
+import { GetBookingQuery } from './queries/get-booking.query';
+import { GetBookingsQuery } from './queries/get-bookings.query';
 
 @Controller('booking')
 export class BookingController {
@@ -18,47 +24,40 @@ export class BookingController {
   constructor(private readonly bookingService: BookingService) {}
 
   @Post()
-  async create(@Body() booking: Booking): Promise<Booking> {
-    this.logger.log(`Creating booking: ${JSON.stringify(booking)}`);
-    const result = await this.bookingService.create(booking);
-    this.logger.log(`Booking created: ${JSON.stringify(result)}`);
-    return result;
+  async createBooking(@Body() createBookingDto: CreateBookingDto) {
+    this.logger.log('Creating a booking');
+    const command = new CreateBookingCommand(createBookingDto);
+    return await this.bookingService.createBooking(command);
   }
 
   @Get()
-  async findAll(): Promise<Booking[]> {
-    this.logger.log('Finding all bookings');
-    const result = await this.bookingService.findAll();
-    this.logger.log(`Found ${result.length} bookings`);
-    return result;
+  async getBookings() {
+    this.logger.log('Getting all bookings');
+    const query = new GetBookingsQuery();
+    return await this.bookingService.getBookings(query);
   }
 
   @Get(':id')
-  async findById(@Param('id') id: string): Promise<Booking> {
-    this.logger.log(`Finding booking by ID: ${id}`);
-    const result = await this.bookingService.findById(id);
-    this.logger.log(`Booking found: ${JSON.stringify(result)}`);
-    return result;
+  async getBooking(@Param('id') id: string) {
+    this.logger.log(`Getting booking with id ${id}`);
+    const query = new GetBookingQuery(id);
+    return await this.bookingService.getBooking(query);
   }
 
   @Put(':id')
-  async update(
+  async updateBooking(
     @Param('id') id: string,
-    @Body() booking: Booking,
-  ): Promise<Booking> {
-    this.logger.log(
-      `Updating booking with ID: ${id}, data: ${JSON.stringify(booking)}`,
-    );
-    const result = await this.bookingService.update(id, booking);
-    this.logger.log(`Booking updated: ${JSON.stringify(result)}`);
-    return result;
+    @Body() updateBookingDto: UpdateBookingDto,
+  ) {
+    this.logger.log(`Updating booking with id ${id}`);
+    const command = new UpdateBookingCommand(id, updateBookingDto);
+    return await this.bookingService.updateBooking(command);
   }
 
   @Delete(':id')
-  async delete(@Param('id') id: string): Promise<boolean> {
-    this.logger.log(`Deleting booking with ID: ${id}`);
-    const result = await this.bookingService.delete(id);
-    this.logger.log(`Booking deleted: ${result}`);
-    return result;
+  async deleteBooking(@Param('id') id: string) {
+    this.logger.log(`Deleting booking with id ${id}`);
+    const command = new DeleteBookingCommand(id);
+    return await this.bookingService.deleteBooking(command);
   }
 }

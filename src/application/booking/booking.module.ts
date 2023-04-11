@@ -17,6 +17,10 @@ import { BookingService } from './booking.service';
       provide: 'IBookingRepository',
       useClass: BookingRepository,
     },
+    {
+      provide: 'IUserRepository',
+      useClass: BookingRepository,
+    },
   ],
 })
 export class BookingModule {}
