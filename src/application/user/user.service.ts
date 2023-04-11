@@ -1,6 +1,11 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { IUserRepository } from '../../domain/interfaces/user.repository.interface';
+import { IUserRepository } from '../../domain/user/interfaces/user.repository';
 import { User } from 'src/domain/user/user.entity';
+import { CreateUserCommand } from './commands/create-user.command';
+import { GetUsersQuery } from './queries/get-users.query';
+import { GetUserQuery } from './queries/get-user.query';
+import { UpdateUserCommand } from './commands/update-user.command';
+import { DeleteUserCommand } from './commands/delete-user.command';
 
 @Injectable()
 export class UserService {
@@ -10,40 +15,30 @@ export class UserService {
     @Inject('IUserRepository') private readonly userRepository: IUserRepository,
   ) {}
 
-  async create(user: User): Promise<User> {
+  async create(command: CreateUserCommand): Promise<User> {
+    const { name, email, password } = command.createUserDto;
+    const user = new User(null, name, email, password);
     this.logger.log(`Creating user: ${JSON.stringify(user)}`);
-    const result = await this.userRepository.create(user);
-    this.logger.log(`User created: ${JSON.stringify(result)}`);
-    return result;
+    return await this.userRepository.create(user);
   }
 
-  async findAll(): Promise<User[]> {
+  async findAll(_query: GetUsersQuery): Promise<User[]> {
     this.logger.log('Finding all users');
-    const result = await this.userRepository.findAll();
-    this.logger.log(`Found ${result.length} users`);
-    return result;
+    return await this.userRepository.findAll();
   }
 
-  async findById(id: string): Promise<User> {
-    this.logger.log(`Finding user by ID: ${id}`);
-    const result = await this.userRepository.findById(id);
-    this.logger.log(`User found: ${JSON.stringify(result)}`);
-    return result;
+  async findById(query: GetUserQuery): Promise<User> {
+    this.logger.log(`Finding user by ID: ${query.id}`);
+    return await this.userRepository.findById(query.id);
   }
 
-  async update(id: string, user: User): Promise<User> {
-    this.logger.log(
-      `Updating user with ID: ${id}, data: ${JSON.stringify(user)}`,
-    );
-    const result = await this.userRepository.update(id, user);
-    this.logger.log(`User updated: ${JSON.stringify(result)}`);
-    return result;
+  async update(command: UpdateUserCommand): Promise<User> {
+    const { name, email, password } = command.updateUsergDto;
+    const user = new User(command.id, name, email, password);
+    return await this.userRepository.update(command.id, user);
   }
 
-  async delete(id: string): Promise<boolean> {
-    this.logger.log(`Deleting user with ID: ${id}`);
-    const result = await this.userRepository.delete(id);
-    this.logger.log(`User deleted: ${result}`);
-    return result;
+  async delete(command: DeleteUserCommand): Promise<boolean> {
+    return await this.userRepository.delete(command.id);
   }
 }

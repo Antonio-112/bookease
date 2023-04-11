@@ -1,9 +1,9 @@
 import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { IUserRepository } from '../../../domain/interfaces/user.repository.interface';
+import { IUserRepository } from '../../../domain/user/interfaces/user.repository';
 import { User } from '../../../domain/user/user.entity';
-import { UserSchema } from './user.schema';
+// import { UserSchema } from './user.schema';
 
 @Injectable()
 export class UserRepository implements IUserRepository {
@@ -14,6 +14,9 @@ export class UserRepository implements IUserRepository {
     return newUser.save();
   }
 
+  async findByName(name: string): Promise<User> {
+    return this.userModel.findOne({ name }).exec();
+  }
   async findAll(): Promise<User[]> {
     return this.userModel.find().exec();
   }
