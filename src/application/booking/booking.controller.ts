@@ -9,13 +9,13 @@ import {
   Logger,
 } from '@nestjs/common';
 import { BookingService } from './booking.service';
-import { CreateBookingDto } from './dtos/create-booking.dto';
-import { UpdateBookingDto } from './dtos/update-booking.dto';
-import { CreateBookingCommand } from './commands/create-booking.command';
-import { UpdateBookingCommand } from './commands/update-booking.command';
-import { DeleteBookingCommand } from './commands/delete-booking.command';
-import { GetBookingQuery } from './queries/get-booking.query';
-import { GetBookingsQuery } from './queries/get-bookings.query';
+import { CreateBookingDto } from './cqrs/dtos/create-booking.dto';
+import { UpdateBookingDto } from './cqrs/dtos/update-booking.dto';
+import { CreateBookingCommand } from './cqrs/commands/create-booking.command';
+import { UpdateBookingCommand } from './cqrs/commands/update-booking.command';
+import { DeleteBookingCommand } from './cqrs/commands/delete-booking.command';
+import { GetBookingQuery } from './cqrs/queries/get-booking.query';
+import { GetBookingsQuery } from './cqrs/queries/get-bookings.query';
 
 @Controller('booking')
 export class BookingController {

@@ -1,26 +1,11 @@
 import { Module } from '@nestjs/common';
-
-import { MongooseModule } from '@nestjs/mongoose';
-import { BookingSchema } from '../../infrastructure/mongo/booking/booking.schema';
-import { BookingRepository } from '../../infrastructure/mongo/booking/booking.repository';
 import { BookingController } from './booking.controller';
 import { BookingService } from './booking.service';
+import { MongoModule } from 'src/infrastructure/mongo/mongo.module';
 
 @Module({
-  imports: [
-    MongooseModule.forFeature([{ name: 'Booking', schema: BookingSchema }]),
-  ],
+  imports: [MongoModule],
   controllers: [BookingController],
-  providers: [
-    BookingService,
-    {
-      provide: 'IBookingRepository',
-      useClass: BookingRepository,
-    },
-    {
-      provide: 'IUserRepository',
-      useClass: BookingRepository,
-    },
-  ],
+  providers: [BookingService],
 })
 export class BookingModule {}
