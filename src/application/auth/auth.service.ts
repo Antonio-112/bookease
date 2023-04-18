@@ -11,8 +11,8 @@ import { LoginDto } from './cqrs/dto/login.dto';
 import { RegisterDto } from './cqrs/dto/register.dto';
 import * as bcrypt from 'bcrypt';
 import { User } from '../../domain/user/user.entity';
-import { LoginAttempt } from 'src/domain/login-attempt/login-attempt.entity';
-import { ILoginAttemptRepository } from 'src/domain/login-attempt/login-attempt.repository';
+import { LoginAttempt } from '../../domain/login-attempt/login-attempt.entity';
+import { ILoginAttemptRepository } from '../../domain/login-attempt/login-attempt.repository';
 
 @Injectable()
 export class AuthService {
