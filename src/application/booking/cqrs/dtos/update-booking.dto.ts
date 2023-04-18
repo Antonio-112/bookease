@@ -1,4 +1,5 @@
-import { IsString, IsOptional, IsDate, IsIn } from 'class-validator';
+import { IsString, IsOptional, IsDate, IsEnum } from 'class-validator';
+import { BookingStatus } from 'src/domain/booking/booking.entity';
 
 export class UpdateBookingDto {
   @IsOptional()
@@ -15,6 +16,6 @@ export class UpdateBookingDto {
 
   @IsOptional()
   @IsString()
-  @IsIn(['confirmed', 'cancelled'])
-  status?: string;
+  @IsEnum(BookingStatus)
+  status?: BookingStatus;
 }

@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Booking } from '../../domain/booking/booking.entity';
 import { CreateBookingCommand } from './cqrs/commands/create-booking.command';
 import { UpdateBookingCommand } from './cqrs/commands/update-booking.command';
@@ -10,6 +10,7 @@ import { GetBookingsQuery } from './cqrs/queries/get-bookings.query';
 
 @Injectable()
 export class BookingService {
+  private readonly logger = new Logger(BookingService.name);
   constructor(
     @Inject('IBookingRepository')
     private readonly bookingRepository: IBookingRepository,
@@ -18,6 +19,9 @@ export class BookingService {
   ) {}
 
   async isTimeSlotAvailable(date: Date, hairdresser: string): Promise<boolean> {
+    this.logger.debug(
+      `Checking time slot availability for ${hairdresser} on ${date}`,
+    );
     const selectedDate = new Date(date);
 
     const startTime = new Date(date);
@@ -57,6 +61,11 @@ export class BookingService {
   }
 
   async createBooking(command: CreateBookingCommand): Promise<Booking> {
+    this.logger.debug(
+      `Creating a booking with data: ${JSON.stringify(
+        command.createBookingDto,
+      )}`,
+    );
     const user = await this.userRepository.findByName(
       command.createBookingDto.name,
     );
@@ -76,14 +85,21 @@ export class BookingService {
   }
 
   async getBookings(query: GetBookingsQuery): Promise<Booking[]> {
+    this.logger.debug('Fetching all bookings');
     return this.bookingRepository.findAll();
   }
 
   async getBooking(query: GetBookingQuery): Promise<Booking> {
+    this.logger.debug(`Fetching booking with ID: ${query.id}`);
     return this.bookingRepository.findById(query.id);
   }
 
   async updateBooking(command: UpdateBookingCommand): Promise<Booking> {
+    this.logger.debug(
+      `Updating booking with ID: ${command.id} and data: ${JSON.stringify(
+        command.updateBookingDto,
+      )}`,
+    );
     const user = await this.userRepository.findByName(
       command.updateBookingDto.name,
     );
@@ -103,6 +119,7 @@ export class BookingService {
   }
 
   async deleteBooking(command: DeleteBookingCommand): Promise<void> {
+    this.logger.debug(`Deleting booking with ID: ${command.id}`);
     return this.bookingRepository.delete(command.id);
   }
 }
