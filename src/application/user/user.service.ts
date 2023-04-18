@@ -1,11 +1,11 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { IUserRepository } from '../../domain/user/interfaces/user.repository';
 import { User } from 'src/domain/user/user.entity';
-import { CreateUserCommand } from './commands/create-user.command';
-import { GetUsersQuery } from './queries/get-users.query';
-import { GetUserQuery } from './queries/get-user.query';
-import { UpdateUserCommand } from './commands/update-user.command';
-import { DeleteUserCommand } from './commands/delete-user.command';
+import { CreateUserCommand } from './cqrs/commands/create-user.command';
+import { GetUsersQuery } from './cqrs/queries/get-users.query';
+import { GetUserQuery } from './cqrs/queries/get-user.query';
+import { UpdateUserCommand } from './cqrs/commands/update-user.command';
+import { DeleteUserCommand } from './cqrs/commands/delete-user.command';
 
 @Injectable()
 export class UserService {
