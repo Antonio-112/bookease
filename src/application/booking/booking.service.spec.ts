@@ -7,10 +7,9 @@ import { Booking } from '../../domain/booking/booking.entity';
 import { CreateBookingCommand } from './cqrs/commands/create-booking.command';
 import { User } from '../../domain/user/user.entity';
 import { DeleteBookingCommand } from './cqrs/commands/delete-booking.command';
+import { GetBookingQuery } from './cqrs/queries/get-booking.query';
+import { GetBookingsQuery } from './cqrs/queries/get-bookings.query';
 // import { UpdateBookingCommand } from './commands/update-booking.command';
-import { GetBookingQuery } from './queries/get-booking.query';
-import { GetBookingsQuery } from './queries/get-bookings.query';
-
 describe('BookingService', () => {
   let bookingService: BookingService;
   const mockBookingRepository = mock<IBookingRepository>();

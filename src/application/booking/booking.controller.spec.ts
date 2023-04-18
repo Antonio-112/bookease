@@ -6,7 +6,7 @@ import { CreateBookingDto } from './cqrs/dtos/create-booking.dto';
 import { UpdateBookingDto } from './cqrs/dtos/update-booking.dto';
 import { Booking } from '../../domain/booking/booking.entity';
 import { UpdateBookingCommand } from './cqrs/commands/update-booking.command';
-import { GetBookingQuery } from './queries/get-booking.query';
+import { GetBookingQuery } from './cqrs/queries/get-booking.query';
 
 const mockBookingService = mock<BookingService>();
 

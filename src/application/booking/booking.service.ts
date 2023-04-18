@@ -4,9 +4,9 @@ import { CreateBookingCommand } from './cqrs/commands/create-booking.command';
 import { UpdateBookingCommand } from './cqrs/commands/update-booking.command';
 import { DeleteBookingCommand } from './cqrs/commands/delete-booking.command';
 import { IBookingRepository } from 'src/domain/booking/interfaces/booking.repository';
-import { GetBookingQuery } from './queries/get-booking.query';
-import { GetBookingsQuery } from './queries/get-bookings.query';
 import { IUserRepository } from '../../domain/user/interfaces/user.repository';
+import { GetBookingQuery } from './cqrs/queries/get-booking.query';
+import { GetBookingsQuery } from './cqrs/queries/get-bookings.query';
 
 @Injectable()
 export class BookingService {
