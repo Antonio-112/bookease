@@ -1,10 +1,5 @@
-import {
-  IsNotEmpty,
-  IsString,
-  IsDate,
-  IsIn,
-  IsOptional,
-} from 'class-validator';
+import { IsNotEmpty, IsString, IsOptional, IsEnum } from 'class-validator';
+import { BookingStatus } from 'src/domain/booking/booking.entity';
 
 export class CreateBookingDto {
   @IsNotEmpty()
@@ -19,7 +14,6 @@ export class CreateBookingDto {
   hairdresser: string;
 
   @IsNotEmpty()
-  @IsString()
-  @IsIn(['confirmed', 'cancelled'])
-  status: string;
+  @IsEnum(BookingStatus)
+  status: BookingStatus;
 }

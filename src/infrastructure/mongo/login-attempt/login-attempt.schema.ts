@@ -1,4 +1,4 @@
-import { Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Schema } from '@nestjs/mongoose';
 import { LoginAttempt } from '../../../domain/login-attempt/login-attempt.entity';
 import * as mongoose from 'mongoose';
 @Schema({ timestamps: { createdAt: 'createdAt' } })
