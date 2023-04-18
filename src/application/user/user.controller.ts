@@ -9,13 +9,13 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from '../../domain/user/user.entity';
-import { GetUserQuery } from './queries/get-user.query';
-import { UpdateUserDto } from './dtos/update-user.dto';
-import { GetUsersQuery } from './queries/get-users.query';
-import { CreateUserDto } from './dtos/create-user.dto';
-import { CreateUserCommand } from './commands/create-user.command';
-import { UpdateUserCommand } from './commands/update-user.command';
-import { DeleteUserCommand } from './commands/delete-user.command';
+import { GetUserQuery } from './cqrs/queries/get-user.query';
+import { UpdateUserDto } from './cqrs/dtos/update-user.dto';
+import { GetUsersQuery } from './cqrs/queries/get-users.query';
+import { CreateUserDto } from './cqrs/dtos/create-user.dto';
+import { CreateUserCommand } from './cqrs/commands/create-user.command';
+import { UpdateUserCommand } from './cqrs/commands/update-user.command';
+import { DeleteUserCommand } from './cqrs/commands/delete-user.command';
 
 @Controller('users')
 export class UserController {
