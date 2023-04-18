@@ -2,10 +2,10 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { BookingController } from './booking.controller';
 import { BookingService } from './booking.service';
 import { mock } from 'jest-mock-extended';
-import { CreateBookingDto } from './dtos/create-booking.dto';
-import { UpdateBookingDto } from './dtos/update-booking.dto';
+import { CreateBookingDto } from './cqrs/dtos/create-booking.dto';
+import { UpdateBookingDto } from './cqrs/dtos/update-booking.dto';
 import { Booking } from '../../domain/booking/booking.entity';
-import { UpdateBookingCommand } from './commands/update-booking.command';
+import { UpdateBookingCommand } from './cqrs/commands/update-booking.command';
 import { GetBookingQuery } from './queries/get-booking.query';
 
 const mockBookingService = mock<BookingService>();
