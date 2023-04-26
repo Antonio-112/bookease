@@ -3,7 +3,7 @@ import { IBookingRepository } from 'src/domain/booking/interfaces/booking.reposi
 import { IUserRepository } from 'src/domain/user/interfaces/user.repository';
 import { mock } from 'jest-mock-extended';
 import { BookingService } from './booking.service';
-import { Booking } from '../../domain/booking/booking.entity';
+import { Booking, BookingStatus } from '../../domain/booking/booking.entity';
 import { CreateBookingCommand } from './cqrs/commands/create-booking.command';
 import { User } from '../../domain/user/user.entity';
 import { DeleteBookingCommand } from './cqrs/commands/delete-booking.command';
@@ -60,7 +60,7 @@ describe('BookingService', () => {
         'Test Name',
         date,
         hairdresser,
-        'confirmed',
+        BookingStatus.CONFIRMED,
       );
 
       mockBookingRepository.findByHairdresserAndTimeRange.mockResolvedValue([
@@ -98,7 +98,7 @@ describe('BookingService', () => {
         name: 'Test Name',
         date: new Date(),
         hairdresser: 'Test Hairdresser',
-        status: 'confirmed',
+        status: BookingStatus.CONFIRMED,
       };
 
       const user = new User('', 'Test Name', 'test@email.com', 'test-password');
@@ -138,14 +138,14 @@ describe('BookingService', () => {
           'Test Name 1',
           new Date(),
           'Test Hairdresser',
-          'confirmed',
+          BookingStatus.CONFIRMED,
         ),
         new Booking(
           '2',
           'Test Name 2',
           new Date(),
           'Test Hairdresser',
-          'confirmed',
+          BookingStatus.CONFIRMED,
         ),
       ];
 
@@ -166,7 +166,7 @@ describe('BookingService', () => {
         'Test Name',
         new Date(),
         'Test Hairdresser',
-        'confirmed',
+        BookingStatus.CONFIRMED,
       );
 
       mockBookingRepository.findById.mockResolvedValue(expectedResult);

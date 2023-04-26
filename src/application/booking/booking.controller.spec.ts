@@ -4,7 +4,7 @@ import { BookingService } from './booking.service';
 import { mock } from 'jest-mock-extended';
 import { CreateBookingDto } from './cqrs/dtos/create-booking.dto';
 import { UpdateBookingDto } from './cqrs/dtos/update-booking.dto';
-import { Booking } from '../../domain/booking/booking.entity';
+import { Booking, BookingStatus } from '../../domain/booking/booking.entity';
 import { UpdateBookingCommand } from './cqrs/commands/update-booking.command';
 import { GetBookingQuery } from './cqrs/queries/get-booking.query';
 
@@ -39,11 +39,13 @@ describe('BookingController', () => {
         name: 'Test Name',
         date: new Date(),
         hairdresser: 'Test Hairdresser',
-        status: 'confirmed',
+        status: BookingStatus.CONFIRMED,
       };
 
       const expectedResult = { id: '1', ...createBookingDto };
-      mockBookingService.createBooking.mockResolvedValue(expectedResult);
+      mockBookingService.createBooking.mockResolvedValue(
+        expectedResult as Booking,
+      );
 
       const result = await bookingController.createBooking(createBookingDto);
 
@@ -62,18 +64,20 @@ describe('BookingController', () => {
           name: 'Test Name 1',
           date: new Date(),
           hairdresser: 'Test Hairdresser 1',
-          status: 'confirmed',
+          status: BookingStatus.CANCELLED,
         },
         {
           id: '2',
           name: 'Test Name 2',
           date: new Date(),
           hairdresser: 'Test Hairdresser 2',
-          status: 'cancelled',
+          status: BookingStatus.CANCELLED,
         },
       ];
 
-      mockBookingService.getBookings.mockResolvedValue(expectedResult);
+      mockBookingService.getBookings.mockResolvedValue(
+        expectedResult as Booking[],
+      );
 
       const result = await bookingController.getBookings();
 
@@ -91,7 +95,7 @@ describe('BookingController', () => {
         'Test Name',
         new Date(),
         'Test Hairdresser',
-        'confirmed',
+        BookingStatus.CONFIRMED,
       );
 
       const getBookingQuery = new GetBookingQuery(id);
@@ -115,7 +119,7 @@ describe('BookingController', () => {
         name: 'Updated Test Name',
         date: new Date(),
         hairdresser: 'Updated Test Hairdresser',
-        status: 'cancelled',
+        status: BookingStatus.CANCELLED,
       };
 
       const expectedResult = new Booking(
