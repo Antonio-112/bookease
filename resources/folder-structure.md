@@ -53,7 +53,7 @@ src/
 │ │ ├── login-attempt.entity.ts
 │ │ └── login-attempt.repository.interface.ts
 ├── infrastructure/
-│ ├── mongoose/
+│ ├── mongo/
 │ │ ├── booking/
 │ │ │ ├── booking.schema.ts
 │ │ │ └── booking.repository.ts

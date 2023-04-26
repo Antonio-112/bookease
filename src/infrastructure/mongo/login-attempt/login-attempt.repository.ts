@@ -14,13 +14,20 @@ export class LoginAttemptRepository implements ILoginAttemptRepository {
     private readonly loginAttemptModel: Model<LoginAttempt>,
   ) {}
 
+  private mapToLoginAttemptEntity(doc: any): LoginAttempt {
+    return new LoginAttempt(doc.id, doc.email, doc.ipAddress, doc.createdAt);
+  }
+
   // Create a new failed login attempt
-  async create(failedLoginAttempt: LoginAttempt): Promise<LoginAttempt> {
+  async create(loginAttempt: LoginAttempt): Promise<LoginAttempt> {
     this.logger.debug('Creating a new failed login attempt');
-    const createdFailedLoginAttempt = new this.loginAttemptModel(
-      failedLoginAttempt,
-    );
-    return createdFailedLoginAttempt.save();
+    const createdLoginAttempt = new this.loginAttemptModel({
+      email: loginAttempt.email,
+      ipAddress: loginAttempt.ipAddress,
+      createdAt: loginAttempt.createdAt,
+    });
+    const savedDoc = await createdLoginAttempt.save();
+    return this.mapToLoginAttemptEntity(savedDoc);
   }
 
   // Count recent failed login attempts by email within the specified time frame
