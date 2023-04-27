@@ -6,6 +6,8 @@ import {
   Param,
   Put,
   Delete,
+  Patch,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from '../../domain/user/user.entity';
@@ -16,6 +18,9 @@ import { CreateUserDto } from './cqrs/dtos/create-user.dto';
 import { CreateUserCommand } from './cqrs/commands/create-user.command';
 import { UpdateUserCommand } from './cqrs/commands/update-user.command';
 import { DeleteUserCommand } from './cqrs/commands/delete-user.command';
+import { UpdatePasswordCommand } from './cqrs/commands/update-password.command';
+import { UpdatePasswordDto } from './cqrs/dtos/update-password.dto';
+import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
 
 @Controller('users')
 export class UserController {
@@ -52,5 +57,17 @@ export class UserController {
   async delete(@Param('id') id: string): Promise<boolean> {
     const command = new DeleteUserCommand(id);
     return this.userService.delete(command);
+  }
+
+  @Patch('password/:id')
+  // Verificar que el usuario este logeado con el token jwt
+  @UseGuards(JwtAuthGuard)
+  async updatePassword(
+    @Param('id') id: string,
+    @Body() updatePasswordDto: UpdatePasswordDto,
+  ): Promise<boolean> {
+    const { oldPassword, newPassword } = updatePasswordDto;
+    const command = new UpdatePasswordCommand(id, newPassword, oldPassword);
+    return this.userService.updatePassword(command);
   }
 }
