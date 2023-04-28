@@ -11,4 +11,7 @@ export interface IBookingRepository {
     startTime: Date,
     endTime: Date,
   ): Promise<Booking[]>;
+  findByTimeRange(startTime: Date, endTime: Date): Promise<Booking[]>;
+  findByStatus(status: string): Promise<Booking[]> {
+
 }
