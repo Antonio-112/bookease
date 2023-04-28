@@ -7,6 +7,9 @@ import { IBookingRepository } from 'src/domain/booking/interfaces/booking.reposi
 import { IUserRepository } from '../../domain/user/interfaces/user.repository';
 import { GetBookingQuery } from './cqrs/queries/get-booking.query';
 import { GetBookingsQuery } from './cqrs/queries/get-bookings.query';
+import { GetBookingByTimeRangeQuery } from './cqrs/queries/get-booking-by-time-range.query copy';
+import { GetBookingByStatusQuery } from './cqrs/queries/get-booking-by-status.query';
+import { UpdateBookingStatusCommand } from './cqrs/commands/update-booking-status.command';
 
 @Injectable()
 export class BookingService {
@@ -121,5 +124,26 @@ export class BookingService {
   async deleteBooking(command: DeleteBookingCommand): Promise<void> {
     this.logger.debug(`Deleting booking with ID: ${command.id}`);
     return this.bookingRepository.delete(command.id);
+  }
+  async updateBookingStatus(
+    command: UpdateBookingStatusCommand,
+  ): Promise<Booking> {
+    this.logger.debug(
+      `Updating booking with ID: ${command.id} to status: ${command.status.status}`,
+    );
+    return this.bookingRepository.updateStatus(
+      command.id,
+      command.status.status,
+    );
+  }
+
+  async findByTimeRange(query: GetBookingByTimeRangeQuery): Promise<Booking[]> {
+    return this.bookingRepository.findByTimeRange(
+      query.startTime,
+      query.endTime,
+    );
+  }
+  async findByStatus(query: GetBookingByStatusQuery): Promise<Booking[]> {
+    return this.bookingRepository.findByStatus(query.status);
   }
 }

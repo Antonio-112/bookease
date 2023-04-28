@@ -16,6 +16,9 @@ import { UpdateBookingCommand } from './cqrs/commands/update-booking.command';
 import { DeleteBookingCommand } from './cqrs/commands/delete-booking.command';
 import { GetBookingQuery } from './cqrs/queries/get-booking.query';
 import { GetBookingsQuery } from './cqrs/queries/get-bookings.query';
+import { GetBookingByStatusQuery } from './cqrs/queries/get-booking-by-status.query';
+import { UpdateBookingStatusDto } from './cqrs/dtos/update-booking-status.dto';
+import { UpdateBookingStatusCommand } from './cqrs/commands/update-booking-status.command';
 
 @Controller('booking')
 export class BookingController {
@@ -44,6 +47,12 @@ export class BookingController {
     return await this.bookingService.getBooking(query);
   }
 
+  @Get('status/:status')
+  async getBookingByStatus(@Param('status') status: string) {
+    const query = new GetBookingByStatusQuery(status);
+    return await this.bookingService.findByStatus(query);
+  }
+
   @Put(':id')
   async updateBooking(
     @Param('id') id: string,
@@ -52,6 +61,16 @@ export class BookingController {
     this.logger.log(`Updating booking with id ${id}`);
     const command = new UpdateBookingCommand(id, updateBookingDto);
     return await this.bookingService.updateBooking(command);
+  }
+
+  @Put(':id/status')
+  async updateBookingStatus(
+    @Param('id') id: string,
+    @Body() updateBookingDto: UpdateBookingStatusDto,
+  ) {
+    this.logger.log(`Updating booking with id ${id}`);
+    const command = new UpdateBookingStatusCommand(id, updateBookingDto);
+    return await this.bookingService.updateBookingStatus(command);
   }
 
   @Delete(':id')
