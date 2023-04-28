@@ -78,7 +78,10 @@ export class BookingRepository implements IBookingRepository {
 
   // Encuentra citas según el estado (por ejemplo, "confirmed", "pending", "cancelled")
   async findByStatus(status: string): Promise<Booking[]> {
+    status.toUpperCase();
+    this.logger.debug('Find by status');
     const docs = await this.bookingModel.find({ status }).exec();
+    this.logger.debug(docs);
     return docs.map(this.mapToBookingEntity);
   }
 
@@ -95,23 +98,17 @@ export class BookingRepository implements IBookingRepository {
     return docs.map(this.mapToBookingEntity);
   }
 
-  // Cancela una cita si no ha comenzado y no ha sido cancelada previamente
-  /* async cancelBooking(id: string): Promise<Booking> {
-    const booking = await this.findById(id);
+  async updateStatus(id: string, status: BookingStatus): Promise<Booking> {
+    const booking = await this.bookingModel.findById(id).exec();
 
     if (!booking) {
       throw new Error('Booking not found');
     }
 
-    if (booking.status === BookingStatus.CANCELLED) {
-      throw new Error('Booking already cancelled');
-    }
+    const doc = await this.bookingModel
+      .findByIdAndUpdate(id, { status: status }, { new: true })
+      .exec();
 
-    if (new Date() >= booking.date) {
-      throw new Error('Cannot cancel a booking that has already started');
-    }
-
-    booking.status = BookingStatus.CANCELLED;
-    return this.update(id, booking);
-  } */
+    return this.mapToBookingEntity(doc);
+  }
 }

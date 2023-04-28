@@ -1,4 +1,4 @@
-import { Booking } from '../booking.entity';
+import { Booking, BookingStatus } from '../booking.entity';
 
 export interface IBookingRepository {
   create(booking: Booking): Promise<Booking>;
@@ -11,4 +11,7 @@ export interface IBookingRepository {
     startTime: Date,
     endTime: Date,
   ): Promise<Booking[]>;
+  findByTimeRange(startTime: Date, endTime: Date): Promise<Booking[]>;
+  findByStatus(status: string): Promise<Booking[]>;
+  updateStatus(id: string, status: BookingStatus): Promise<Booking>;
 }
