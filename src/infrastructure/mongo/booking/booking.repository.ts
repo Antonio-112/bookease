@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Booking } from '../../../domain/booking/booking.entity';
+import { Booking, BookingStatus } from '../../../domain/booking/booking.entity';
 import { IBookingRepository } from '../../../domain/booking/interfaces/booking.repository';
 
 @Injectable()
@@ -75,4 +75,43 @@ export class BookingRepository implements IBookingRepository {
       .exec();
     return docs.map(this.mapToBookingEntity);
   }
+
+  // Encuentra citas según el estado (por ejemplo, "confirmed", "pending", "cancelled")
+  async findByStatus(status: string): Promise<Booking[]> {
+    const docs = await this.bookingModel.find({ status }).exec();
+    return docs.map(this.mapToBookingEntity);
+  }
+
+  // Encuentra citas en un intervalo de tiempo específico sin importar el peluquero
+  async findByTimeRange(startTime: Date, endTime: Date): Promise<Booking[]> {
+    const docs = await this.bookingModel
+      .find({
+        date: {
+          $gte: startTime,
+          $lt: endTime,
+        },
+      })
+      .exec();
+    return docs.map(this.mapToBookingEntity);
+  }
+
+  // Cancela una cita si no ha comenzado y no ha sido cancelada previamente
+  /* async cancelBooking(id: string): Promise<Booking> {
+    const booking = await this.findById(id);
+
+    if (!booking) {
+      throw new Error('Booking not found');
+    }
+
+    if (booking.status === BookingStatus.CANCELLED) {
+      throw new Error('Booking already cancelled');
+    }
+
+    if (new Date() >= booking.date) {
+      throw new Error('Cannot cancel a booking that has already started');
+    }
+
+    booking.status = BookingStatus.CANCELLED;
+    return this.update(id, booking);
+  } */
 }
