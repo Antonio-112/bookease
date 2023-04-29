@@ -1,5 +1,6 @@
 import { Module, Provider } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ConfigService } from '@nestjs/config';
 import { User } from '../../domain/user/user.entity';
 import { UserSchema } from './users/user.schema';
 import { UserRepository } from './users/user.repository';
@@ -10,7 +11,7 @@ import { BookingRepository } from './booking/booking.repository';
 import { Booking } from 'src/domain/booking/booking.entity';
 import { BookingSchema } from './booking/booking.schema';
 
-const providers: Provider[] = [
+const mongoProviders: Provider[] = [
   {
     provide: 'IUserRepository',
     useClass: UserRepository,
@@ -24,11 +25,17 @@ const providers: Provider[] = [
     useClass: BookingRepository,
   },
 ];
+
 @Module({
   imports: [
-    MongooseModule.forRoot(
-      'mongodb+srv://admin:admin@cluster0.1us65oe.mongodb.net/?retryWrites=true&w=majority',
-    ),
+    MongooseModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get('DATABASE_URL'),
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      }),
+    }),
     MongooseModule.forFeature([
       { name: User.name, schema: UserSchema },
       { name: LoginAttempt.name, schema: LoginAttemptSchema },
@@ -36,7 +43,7 @@ const providers: Provider[] = [
     ]),
   ],
   controllers: [],
-  providers: [...providers],
-  exports: [...providers],
+  providers: [...mongoProviders],
+  exports: [...mongoProviders],
 })
 export class MongoModule {}
