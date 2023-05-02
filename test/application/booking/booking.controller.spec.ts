@@ -1,12 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { BookingController } from './booking.controller';
-import { BookingService } from './booking.service';
+import { BookingController } from '../../../src/application/booking/booking.controller';
+import { BookingService } from '../../../src/application/booking/booking.service';
 import { mock } from 'jest-mock-extended';
-import { CreateBookingDto } from './cqrs/dtos/create-booking.dto';
-import { UpdateBookingDto } from './cqrs/dtos/update-booking.dto';
-import { Booking, BookingStatus } from '../../domain/booking/booking.entity';
-import { UpdateBookingCommand } from './cqrs/commands/update-booking.command';
-import { GetBookingQuery } from './cqrs/queries/get-booking.query';
+import { CreateBookingDto } from '../../../src/application/booking/cqrs/dtos/create-booking.dto';
+import { UpdateBookingDto } from '../../../src/application/booking/cqrs/dtos/update-booking.dto';
+import {
+  Booking,
+  BookingStatus,
+} from '../../../src/domain/booking/booking.entity';
+import { UpdateBookingCommand } from '../../../src/application/booking/cqrs/commands/update-booking.command';
+import { GetBookingQuery } from '../../../src/application/booking/cqrs/queries/get-booking.query';
 
 const mockBookingService = mock<BookingService>();
 

@@ -1,16 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserController } from './user.controller';
-import { UserService } from './user.service';
-import { CreateUserDto } from './cqrs/dtos/create-user.dto';
-import { UpdateUserDto } from './cqrs/dtos/update-user.dto';
-import { UpdatePasswordDto } from './cqrs/dtos/update-password.dto';
-import { User } from '../../domain/user/user.entity';
-import { CreateUserCommand } from './cqrs/commands/create-user.command';
-import { UpdateUserCommand } from './cqrs/commands/update-user.command';
-import { DeleteUserCommand } from './cqrs/commands/delete-user.command';
-import { UpdatePasswordCommand } from './cqrs/commands/update-password.command';
-import { GetUserQuery } from './cqrs/queries/get-user.query';
-import { GetUsersQuery } from './cqrs/queries/get-users.query';
+import { UserController } from '../../../src/application/user/user.controller';
+import { UserService } from '../../../src/application/user/user.service';
+import { CreateUserDto } from '../../../src/application/user/cqrs/dtos/create-user.dto';
+import { UpdateUserDto } from '../../../src/application/user/cqrs/dtos/update-user.dto';
+import { UpdatePasswordDto } from '../../../src/application/user/cqrs/dtos/update-password.dto';
+import { User } from '../../../src/domain/user/user.entity';
+import { CreateUserCommand } from '../../../src/application/user/cqrs/commands/create-user.command';
+import { UpdateUserCommand } from '../../../src/application/user/cqrs/commands/update-user.command';
+import { DeleteUserCommand } from '../../../src/application/user/cqrs/commands/delete-user.command';
+import { UpdatePasswordCommand } from '../../../src/application/user/cqrs/commands/update-password.command';
+import { GetUserQuery } from '../../../src/application/user/cqrs/queries/get-user.query';
+import { GetUsersQuery } from '../../../src/application/user/cqrs/queries/get-users.query';
 import { mock, MockProxy } from 'jest-mock-extended';
 
 describe('UserController', () => {

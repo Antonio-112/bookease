@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getModelToken } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { LoginAttemptRepository } from './login-attempt.repository';
-import { LoginAttempt } from '../../../domain/login-attempt/login-attempt.entity';
+import { LoginAttemptRepository } from '../../../src/infrastructure/mongo/login-attempt/login-attempt.repository';
+import { LoginAttempt } from '../../../src/domain/login-attempt/login-attempt.entity';
 
 describe('LoginAttemptRepository', () => {
   let repository: LoginAttemptRepository;
@@ -29,34 +29,6 @@ describe('LoginAttemptRepository', () => {
     expect(repository).toBeDefined();
   });
 
-  /*   describe('create', () => {
-    it('should create a new failed login attempt', async () => {
-      // Arrange
-      const loginAttempt = new LoginAttempt(
-        '1',
-        'test@example.com',
-        '127.0.0.1',
-        new Date(),
-      );
-      const createdLoginAttempt = new LoginAttempt(
-        '1',
-        'test@example.com',
-        '127.0.0.1',
-        new Date(),
-      );
-      const saveSpy = jest
-        .spyOn(loginAttemptModel.prototype, 'save')
-        .mockResolvedValue(createdLoginAttempt);
-
-      // Act
-      const result = await repository.create(loginAttempt);
-
-      // Assert
-      expect(saveSpy).toHaveBeenCalled();
-      expect(result).toEqual(createdLoginAttempt);
-    });
-  });
- */
   describe('countRecentAttemptsByEmail', () => {
     it('should count recent failed login attempts by email within the specified time frame', async () => {
       // Arrange
