@@ -6,9 +6,9 @@ import { UserSchema } from './users/user.schema';
 import { UserRepository } from './users/user.repository';
 import { LoginAttemptRepository } from './login-attempt/login-attempt.repository';
 import { LoginAttemptSchema } from './login-attempt/login-attempt.schema';
-import { LoginAttempt } from 'src/domain/login-attempt/login-attempt.entity';
+import { LoginAttempt } from '../../domain/login-attempt/login-attempt.entity';
 import { BookingRepository } from './booking/booking.repository';
-import { Booking } from 'src/domain/booking/booking.entity';
+import { Booking } from '../../domain/booking/booking.entity';
 import { BookingSchema } from './booking/booking.schema';
 
 const mongoProviders: Provider[] = [
