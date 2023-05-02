@@ -11,15 +11,14 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from '../../domain/user/user.entity';
-import { GetUserQuery } from './cqrs/queries/get-user.query';
-import { UpdateUserDto } from './cqrs/dtos/update-user.dto';
-import { GetUsersQuery } from './cqrs/queries/get-users.query';
-import { CreateUserDto } from './cqrs/dtos/create-user.dto';
-import { CreateUserCommand } from './cqrs/commands/create-user.command';
-import { UpdateUserCommand } from './cqrs/commands/update-user.command';
-import { DeleteUserCommand } from './cqrs/commands/delete-user.command';
-import { UpdatePasswordCommand } from './cqrs/commands/update-password.command';
-import { UpdatePasswordDto } from './cqrs/dtos/update-password.dto';
+import { GetUserQuery, GetUsersQuery } from './cqrs/queries';
+import { CreateUserDto, UpdatePasswordDto, UpdateUserDto } from './cqrs/dtos';
+import {
+  CreateUserCommand,
+  DeleteUserCommand,
+  UpdatePasswordCommand,
+  UpdateUserCommand,
+} from './cqrs/commands';
 import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
 
 @Controller('users')

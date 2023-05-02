@@ -3,6 +3,8 @@ import { AuthService } from './auth.service';
 import { LoginDto } from './cqrs/dto/login.dto';
 import { RegisterDto } from './cqrs/dto/register.dto';
 import { Request } from 'express';
+import { CreateRegisterCommand } from './cqrs/commands/create-register.command';
+import { GetLoginQuery } from './cqrs/queries/get-login.query';
 
 @Controller('auth')
 export class AuthController {
@@ -16,11 +18,13 @@ export class AuthController {
   ): Promise<string> {
     const ipAddress = req.ip;
     this.logger.debug('ipAddess: ' + ipAddress);
-    return this.authService.login(loginDto, ipAddress);
+    const query = new GetLoginQuery(loginDto, ipAddress);
+    return this.authService.login(query);
   }
 
   @Post('register')
   async register(@Body() registerDto: RegisterDto) {
-    return this.authService.register(registerDto);
+    const command = new CreateRegisterCommand(registerDto);
+    return this.authService.register(command);
   }
 }

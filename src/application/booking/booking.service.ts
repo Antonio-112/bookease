@@ -7,7 +7,7 @@ import { IBookingRepository } from 'src/domain/booking/interfaces/booking.reposi
 import { IUserRepository } from '../../domain/user/interfaces/user.repository';
 import { GetBookingQuery } from './cqrs/queries/get-booking.query';
 import { GetBookingsQuery } from './cqrs/queries/get-bookings.query';
-import { GetBookingByTimeRangeQuery } from './cqrs/queries/get-booking-by-time-range.query copy';
+import { GetBookingByTimeRangeQuery } from './cqrs/queries/get-booking-by-time-range.query';
 import { GetBookingByStatusQuery } from './cqrs/queries/get-booking-by-status.query';
 import { UpdateBookingStatusCommand } from './cqrs/commands/update-booking-status.command';
 

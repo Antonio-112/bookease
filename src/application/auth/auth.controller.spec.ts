@@ -5,6 +5,8 @@ import { LoginDto } from './cqrs/dto/login.dto';
 import { RegisterDto } from './cqrs/dto/register.dto';
 import { mock, MockProxy } from 'jest-mock-extended';
 import { User } from '../../domain/user/user.entity';
+import { GetLoginQuery } from './cqrs/queries';
+import { CreateRegisterCommand } from './cqrs/commands';
 
 describe('AuthController', () => {
   let controller: AuthController;
@@ -45,7 +47,9 @@ describe('AuthController', () => {
       const result = await controller.login(loginDto, req as any);
 
       expect(result).toEqual(expectedResult);
-      expect(authService.login).toHaveBeenCalledWith(loginDto, ipAddress);
+      expect(authService.login).toHaveBeenCalledWith(
+        new GetLoginQuery(loginDto, ipAddress),
+      );
     });
   });
 
@@ -67,7 +71,9 @@ describe('AuthController', () => {
       const result = await controller.register(registerDto);
 
       expect(result).toEqual(expectedResult);
-      expect(authService.register).toHaveBeenCalledWith(registerDto);
+      expect(authService.register).toHaveBeenCalledWith(
+        new CreateRegisterCommand(registerDto),
+      );
     });
   });
 });
