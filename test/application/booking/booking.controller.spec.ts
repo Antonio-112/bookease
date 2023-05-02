@@ -2,14 +2,16 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { BookingController } from '../../../src/application/booking/booking.controller';
 import { BookingService } from '../../../src/application/booking/booking.service';
 import { mock } from 'jest-mock-extended';
-import { CreateBookingDto } from '../../../src/application/booking/cqrs/dtos/create-booking.dto';
-import { UpdateBookingDto } from '../../../src/application/booking/cqrs/dtos/update-booking.dto';
+import {
+  CreateBookingDto,
+  UpdateBookingDto,
+} from '../../../src/application/booking/cqrs/dtos';
 import {
   Booking,
   BookingStatus,
 } from '../../../src/domain/booking/booking.entity';
-import { UpdateBookingCommand } from '../../../src/application/booking/cqrs/commands/update-booking.command';
-import { GetBookingQuery } from '../../../src/application/booking/cqrs/queries/get-booking.query';
+import { UpdateBookingCommand } from '../../../src/application/booking/cqrs/commands';
+import { GetBookingQuery } from '../../../src/application/booking/cqrs/queries';
 
 const mockBookingService = mock<BookingService>();
 
@@ -17,7 +19,17 @@ describe('BookingController', () => {
   let bookingController: BookingController;
   let bookingService: BookingService;
 
-  beforeEach(async () => {
+  // mocks
+
+  const createBookingDtoMock: CreateBookingDto = {
+    name: 'Test Name',
+    date: new Date(),
+    hairdresser: 'Test Hairdresser',
+    status: BookingStatus.CONFIRMED,
+  };
+
+  //
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [BookingController],
       providers: [
@@ -36,21 +48,17 @@ describe('BookingController', () => {
     expect(bookingController).toBeDefined();
     expect(bookingService).toBeDefined();
   });
+
   describe('createBooking', () => {
     it('should call createBooking with correct parameters and return the result', async () => {
-      const createBookingDto: CreateBookingDto = {
-        name: 'Test Name',
-        date: new Date(),
-        hairdresser: 'Test Hairdresser',
-        status: BookingStatus.CONFIRMED,
-      };
-
-      const expectedResult = { id: '1', ...createBookingDto };
+      const expectedResult = { id: '1', ...createBookingDtoMock };
       mockBookingService.createBooking.mockResolvedValue(
         expectedResult as Booking,
       );
 
-      const result = await bookingController.createBooking(createBookingDto);
+      const result = await bookingController.createBooking(
+        createBookingDtoMock,
+      );
 
       /* expect(bookingService.createBooking).toHaveBeenCalledWith(
         expect.(createBookingDto),
@@ -152,18 +160,4 @@ describe('BookingController', () => {
       expect(result).toEqual(expectedResult);
     });
   });
-
-  /*   describe('deleteBooking', () => {
-    it('should call deleteBooking with correct id and return the result', async () => {
-      const id = '1';
-      const expectedResult = { message: 'Booking deleted successfully' };
-
-      mockBookingService.deleteBooking.mockResolvedValue(expectedResult);
-
-      const result = await bookingController.deleteBooking(id);
-
-      expect(mockBookingService.deleteBooking).toHaveBeenCalledWith(id);
-      expect(result).toEqual(expectedResult);
-    });
-  }); */
 });

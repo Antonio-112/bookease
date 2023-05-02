@@ -1,6 +1,6 @@
 {
   "name": "bookease-back",
-  "version": "0.1.4",
+  "version": "0.1.6",
   "description": "Managing reservations in various types of businesses.",
   "author": "Antonio A.",
   "private": true,

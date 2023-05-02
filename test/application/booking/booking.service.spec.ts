@@ -7,18 +7,22 @@ import {
   Booking,
   BookingStatus,
 } from '../../../src/domain/booking/booking.entity';
-import { CreateBookingCommand } from '../../../src/application/booking/cqrs/commands/create-booking.command';
+import {
+  CreateBookingCommand,
+  DeleteBookingCommand,
+} from '../../../src/application/booking/cqrs/commands';
 import { User } from '../../../src/domain/user/user.entity';
-import { DeleteBookingCommand } from '../../../src/application/booking/cqrs/commands/delete-booking.command';
-import { GetBookingQuery } from '../../../src/application/booking/cqrs/queries/get-booking.query';
-import { GetBookingsQuery } from '../../../src/application/booking/cqrs/queries/get-bookings.query';
-// import { UpdateBookingCommand } from './commands/update-booking.command';
+import {
+  GetBookingQuery,
+  GetBookingsQuery,
+} from '../../../src/application/booking/cqrs/queries';
+
 describe('BookingService', () => {
   let bookingService: BookingService;
   const mockBookingRepository = mock<IBookingRepository>();
   const mockUserRepository = mock<IUserRepository>();
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       providers: [
         BookingService,

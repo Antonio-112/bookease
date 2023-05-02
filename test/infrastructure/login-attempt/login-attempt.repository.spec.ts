@@ -8,7 +8,7 @@ describe('LoginAttemptRepository', () => {
   let repository: LoginAttemptRepository;
   let loginAttemptModel: Model<LoginAttempt>;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         LoginAttemptRepository,
