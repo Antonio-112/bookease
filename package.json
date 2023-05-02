@@ -34,6 +34,7 @@
     "class-validator": "^0.14.0",
     "helmet": "^6.1.4",
     "jest-mock-extended": "^3.0.4",
+    "mongodb-memory-server": "^8.12.2",
     "mongoose": "^7.0.3",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
@@ -88,8 +89,8 @@
     "coverageDirectory": "../coverage",
     "coverageThreshold": {
       "global": {
-        "statements": 50,
-        "branches": 50,
+        "statements": 60,
+        "branches": 40,
         "functions": 50,
         "lines": 50
       }

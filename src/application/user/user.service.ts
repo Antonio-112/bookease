@@ -1,6 +1,6 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { IUserRepository } from '../../domain/user/interfaces/user.repository';
-import { User } from 'src/domain/user/user.entity';
+import { User } from '../../domain/user/user.entity';
 import { CreateUserCommand } from './cqrs/commands/create-user.command';
 import { GetUsersQuery } from './cqrs/queries/get-users.query';
 import { GetUserQuery } from './cqrs/queries/get-user.query';
