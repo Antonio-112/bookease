@@ -2,20 +2,27 @@ import { Test } from '@nestjs/testing';
 import { IBookingRepository } from 'src/domain/booking/interfaces/booking.repository';
 import { IUserRepository } from 'src/domain/user/interfaces/user.repository';
 import { mock } from 'jest-mock-extended';
-import { BookingService } from './booking.service';
-import { Booking, BookingStatus } from '../../domain/booking/booking.entity';
-import { CreateBookingCommand } from './cqrs/commands/create-booking.command';
-import { User } from '../../domain/user/user.entity';
-import { DeleteBookingCommand } from './cqrs/commands/delete-booking.command';
-import { GetBookingQuery } from './cqrs/queries/get-booking.query';
-import { GetBookingsQuery } from './cqrs/queries/get-bookings.query';
-// import { UpdateBookingCommand } from './commands/update-booking.command';
+import { BookingService } from '../../../src/application/booking/booking.service';
+import {
+  Booking,
+  BookingStatus,
+} from '../../../src/domain/booking/booking.entity';
+import {
+  CreateBookingCommand,
+  DeleteBookingCommand,
+} from '../../../src/application/booking/cqrs/commands';
+import { User } from '../../../src/domain/user/user.entity';
+import {
+  GetBookingQuery,
+  GetBookingsQuery,
+} from '../../../src/application/booking/cqrs/queries';
+
 describe('BookingService', () => {
   let bookingService: BookingService;
   const mockBookingRepository = mock<IBookingRepository>();
   const mockUserRepository = mock<IUserRepository>();
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       providers: [
         BookingService,

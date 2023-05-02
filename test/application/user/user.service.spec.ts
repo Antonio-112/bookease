@@ -1,16 +1,19 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserService } from './user.service';
-import { IUserRepository } from '../../domain/user/interfaces/user.repository';
-import { User } from '../../domain/user/user.entity';
-import { CreateUserCommand } from './cqrs/commands/create-user.command';
-import { UpdateUserCommand } from './cqrs/commands/update-user.command';
-import { DeleteUserCommand } from './cqrs/commands/delete-user.command';
-import { UpdatePasswordCommand } from './cqrs/commands/update-password.command';
-import { GetUserQuery } from './cqrs/queries/get-user.query';
-import { GetUsersQuery } from './cqrs/queries/get-users.query';
+import {
+  CreateUserCommand,
+  UpdateUserCommand,
+  DeleteUserCommand,
+  UpdatePasswordCommand,
+} from '../../../src/application/user/cqrs/commands';
 import { mock, MockProxy } from 'jest-mock-extended';
 import { hash } from 'bcrypt';
-// import { compare } from 'bcrypt';
+import {
+  GetUserQuery,
+  GetUsersQuery,
+} from '../../../src/application/user/cqrs/queries';
+import { UserService } from '../../../src/application/user/user.service';
+import { IUserRepository } from '../../../src/domain/user/interfaces/user.repository';
+import { User } from '../../../src/domain/user/user.entity';
 
 describe('UserService', () => {
   let service: UserService;

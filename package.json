@@ -1,6 +1,6 @@
 {
   "name": "bookease-back",
-  "version": "0.1.4",
+  "version": "0.1.6",
   "description": "Managing reservations in various types of businesses.",
   "author": "Antonio A.",
   "private": true,
@@ -72,13 +72,13 @@
       "json",
       "ts"
     ],
-    "rootDir": "src",
+    "rootDir": "./",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },
     "collectCoverageFrom": [
-      "**/*.(t|j)s"
+      "**/*.(t)s"
     ],
     "coveragePathIgnorePatterns": [
       "/node_modules/",
@@ -97,4 +97,5 @@
     },
     "testEnvironment": "node"
   }
+  
 }

@@ -1,16 +1,16 @@
 import { Test } from '@nestjs/testing';
-import { AuthService } from './auth.service';
-import { IUserRepository } from '../../domain/user/interfaces/user.repository';
-import { ILoginAttemptRepository } from '../../domain/login-attempt/login-attempt.repository';
+import { AuthService } from '../../../src/application/auth/auth.service';
+import { IUserRepository } from '../../../src/domain/user/interfaces/user.repository';
+import { ILoginAttemptRepository } from '../../../src/domain/login-attempt/login-attempt.repository';
 import { JwtService } from '@nestjs/jwt';
-import { User } from '../../domain/user/user.entity';
+import { User } from '../../../src/domain/user/user.entity';
 import * as bcrypt from 'bcrypt';
 import { MockProxy, mock } from 'jest-mock-extended';
-import { LoginDto } from './cqrs/dto/login.dto';
+import { LoginDto } from '../../../src/application/auth/cqrs/dto/login.dto';
 import { HttpException, HttpStatus } from '@nestjs/common';
-import { CreateRegisterCommand } from './cqrs/commands';
-import { RegisterDto } from './cqrs/dto/register.dto';
-import { GetLoginQuery } from './cqrs/queries';
+import { CreateRegisterCommand } from '../../../src/application/auth/cqrs/commands';
+import { RegisterDto } from '../../../src/application/auth/cqrs/dto/register.dto';
+import { GetLoginQuery } from '../../../src/application/auth/cqrs/queries';
 
 describe('AuthService', () => {
   let authService: AuthService;
