@@ -5,17 +5,40 @@ import { ILoginAttemptRepository } from '../../domain/login-attempt/login-attemp
 import { JwtService } from '@nestjs/jwt';
 import { User } from '../../domain/user/user.entity';
 import * as bcrypt from 'bcrypt';
-// import { LoginAttempt } from 'src/domain/login-attempt/login-attempt.entity';
 import { MockProxy, mock } from 'jest-mock-extended';
-import { RegisterDto } from './cqrs/dto/register.dto';
 import { LoginDto } from './cqrs/dto/login.dto';
 import { HttpException, HttpStatus } from '@nestjs/common';
+import { CreateRegisterCommand } from './cqrs/commands';
+import { RegisterDto } from './cqrs/dto/register.dto';
+import { GetLoginQuery } from './cqrs/queries';
 
 describe('AuthService', () => {
   let authService: AuthService;
   let userRepositoryMock: MockProxy<IUserRepository>;
   let loginAttemptRepositoryMock: MockProxy<ILoginAttemptRepository>;
   let jwtServiceMock: MockProxy<JwtService>;
+
+  /// Mocks and stuffs
+
+  const registerDtoMock: RegisterDto = {
+    name: 'Test User',
+    email: 'test@test.com',
+    password: 'password',
+  };
+
+  const loginDto: LoginDto = {
+    email: 'test@test.com',
+    password: 'password',
+  };
+
+  const userMock = new User(
+    '1',
+    'Test User',
+    'test@test.com',
+    'hashed_password',
+  );
+
+  ///
 
   beforeEach(async () => {
     userRepositoryMock = mock<IUserRepository>();
@@ -51,24 +74,15 @@ describe('AuthService', () => {
     it('should return "User not found" if user is not found by email', async () => {
       userRepositoryMock.findByEmail.mockResolvedValue(null);
 
-      const loginDto: LoginDto = {
-        email: 'test@test.com',
-        password: 'password',
-      };
-      const result = await authService.login(loginDto, '127.0.0.1');
+      const query = new GetLoginQuery(loginDto, '127.0.0.1');
+      const result = await authService.login(query);
 
       expect(result).toBe('User not found');
     });
 
-    const fakeUser = new User(
-      '1',
-      'Test User',
-      'test@test.com',
-      'hashed_password',
-    );
-
     it('should return "Invalid password" if the password is incorrect', async () => {
-      userRepositoryMock.findByEmail.mockResolvedValue(fakeUser);
+      const query = new GetLoginQuery(loginDto, '127.0.0.1');
+      userRepositoryMock.findByEmail.mockResolvedValue(userMock);
       loginAttemptRepositoryMock.countRecentAttemptsByEmail.mockResolvedValue(
         0,
       );
@@ -80,21 +94,18 @@ describe('AuthService', () => {
         .spyOn(bcrypt, 'compare')
         .mockResolvedValue(false);
 
-      const loginDto: LoginDto = {
-        email: 'test@test.com',
-        password: 'incorrect_password',
-      };
-      const result = await authService.login(loginDto, '127.0.0.1');
+      const result = await authService.login(query);
 
       expect(result).toBe('Invalid password');
       expect(bcryptCompareSpy).toHaveBeenCalledWith(
         loginDto.password,
-        fakeUser.password,
+        userMock.password,
       );
     });
 
     it('should throw an error if there are too many failed login attempts', async () => {
-      userRepositoryMock.findByEmail.mockResolvedValue(fakeUser);
+      const query = new GetLoginQuery(loginDto, '127.0.0.1');
+      userRepositoryMock.findByEmail.mockResolvedValue(userMock);
       loginAttemptRepositoryMock.countRecentAttemptsByEmail.mockResolvedValue(
         5,
       );
@@ -102,12 +113,7 @@ describe('AuthService', () => {
         0,
       );
 
-      const loginDto: LoginDto = {
-        email: 'test@test.com',
-        password: 'password',
-      };
-
-      await expect(authService.login(loginDto, '127.0.0.1')).rejects.toThrow(
+      await expect(authService.login(query)).rejects.toThrow(
         new HttpException(
           'Too many failed login attempts. Please try again later.',
           HttpStatus.TOO_MANY_REQUESTS,
@@ -116,7 +122,9 @@ describe('AuthService', () => {
     });
 
     it('should return a JWT token if the login is successful', async () => {
-      userRepositoryMock.findByEmail.mockResolvedValue(fakeUser);
+      const query = new GetLoginQuery(loginDto, '127.0.0.1');
+
+      userRepositoryMock.findByEmail.mockResolvedValue(userMock);
       loginAttemptRepositoryMock.countRecentAttemptsByEmail.mockResolvedValue(
         0,
       );
@@ -126,16 +134,12 @@ describe('AuthService', () => {
       jest.spyOn(bcrypt, 'compare').mockResolvedValue(true);
       jwtServiceMock.sign.mockReturnValue('jwt_token');
 
-      const loginDto: LoginDto = {
-        email: 'test@test.com',
-        password: 'password',
-      };
-      const result = await authService.login(loginDto, '127.0.0.1');
+      const result = await authService.login(query);
 
       expect(JSON.parse(result)).toEqual({ access_token: 'jwt_token' });
       expect(jwtServiceMock.sign).toHaveBeenCalledWith({
-        sub: fakeUser.id,
-        email: fakeUser.email,
+        sub: userMock.id,
+        email: userMock.email,
       });
     });
   });
@@ -150,13 +154,9 @@ describe('AuthService', () => {
       );
       userRepositoryMock.findByEmail.mockResolvedValue(existingUser);
 
-      const registerDto = {
-        name: 'Test User',
-        email: 'test@test.com',
-        password: 'password',
-      };
+      const command = new CreateRegisterCommand(registerDtoMock);
 
-      await expect(authService.register(registerDto)).rejects.toThrowError(
+      await expect(authService.register(command)).rejects.toThrowError(
         'Email already in use',
       );
     });
@@ -170,12 +170,8 @@ describe('AuthService', () => {
         .spyOn(bcrypt, 'hash')
         .mockResolvedValue('hashed_password');
 
-      const registerDto: RegisterDto = {
-        name: 'Test User',
-        email: 'test@test.com',
-        password: 'password',
-      };
-      const result = await authService.register(registerDto);
+      const command = new CreateRegisterCommand(registerDtoMock);
+      const result = await authService.register(command);
 
       expect(bcryptHashSpy).toHaveBeenCalled();
       expect(userRepositoryMock.create).toHaveBeenCalledWith(
@@ -200,18 +196,12 @@ describe('AuthService', () => {
         .spyOn(bcrypt, 'hash')
         .mockRejectedValue(new Error('Hashing failed'));
 
-      const registerDto: RegisterDto = {
-        name: 'Test User',
-        email: 'test@test.com',
-        password: 'password',
-      };
+      const command = new CreateRegisterCommand(registerDtoMock);
 
-      await expect(authService.register(registerDto)).rejects.toThrowError(
+      await expect(authService.register(command)).rejects.toThrowError(
         'Hashing failed',
       );
       expect(bcryptHashSpy).toHaveBeenCalled();
     });
-
-    // Add more tests for register method here
   });
 });
