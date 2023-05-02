@@ -45,7 +45,7 @@ describe('UserController', () => {
         password: 'password',
       };
 
-      const expectedResult: any = {
+      const expectedResult = {
         email: 'antonio@mail.com',
         name: 'antonio',
         password: 'password',
@@ -64,7 +64,7 @@ describe('UserController', () => {
 
   describe('findAll', () => {
     it('should return an array of users', async () => {
-      const expectedResult: any[] = [
+      const expectedResult = [
         {
           email: 'antonio@mail.com',
           name: 'antonio',

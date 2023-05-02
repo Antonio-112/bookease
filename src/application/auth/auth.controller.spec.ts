@@ -41,8 +41,8 @@ describe('AuthController', () => {
 
       authService.login.mockResolvedValue(expectedResult);
 
-      const req = { ip: ipAddress } as any;
-      const result = await controller.login(loginDto, req);
+      const req = { ip: ipAddress };
+      const result = await controller.login(loginDto, req as any);
 
       expect(result).toEqual(expectedResult);
       expect(authService.login).toHaveBeenCalledWith(loginDto, ipAddress);
