@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getModelToken } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { LoginAttemptRepository } from '../../../src/infrastructure/mongo/login-attempt/login-attempt.repository';
-import { LoginAttempt } from '../../../src/domain/login-attempt/login-attempt.entity';
+import { LoginAttemptRepository } from '../../../../src/infrastructure/mongo/login-attempt/login-attempt.repository';
+import { LoginAttempt } from '../../../../src/domain/login-attempt/login-attempt.entity';
 
 describe('LoginAttemptRepository', () => {
   let repository: LoginAttemptRepository;
@@ -20,9 +20,7 @@ describe('LoginAttemptRepository', () => {
     }).compile();
 
     repository = module.get<LoginAttemptRepository>(LoginAttemptRepository);
-    loginAttemptModel = module.get<Model<LoginAttempt>>(
-      getModelToken(LoginAttempt.name),
-    );
+    loginAttemptModel = module.get<Model<LoginAttempt>>(getModelToken(LoginAttempt.name));
   });
 
   it('should be defined', () => {
@@ -34,15 +32,10 @@ describe('LoginAttemptRepository', () => {
       // Arrange
       const email = 'test@example.com';
       const timeFrameMinutes = 5;
-      const countSpy = jest
-        .spyOn(loginAttemptModel, 'countDocuments')
-        .mockResolvedValue(2);
+      const countSpy = jest.spyOn(loginAttemptModel, 'countDocuments').mockResolvedValue(2);
 
       // Act
-      const result = await repository.countRecentAttemptsByEmail(
-        email,
-        timeFrameMinutes,
-      );
+      const result = await repository.countRecentAttemptsByEmail(email, timeFrameMinutes);
 
       // Assert
       expect(countSpy).toHaveBeenCalledWith({
@@ -58,15 +51,10 @@ describe('LoginAttemptRepository', () => {
       // Arrange
       const ipAddress = '127.0.0.1';
       const timeFrameMinutes = 5;
-      const countSpy = jest
-        .spyOn(loginAttemptModel, 'countDocuments')
-        .mockResolvedValue(3);
+      const countSpy = jest.spyOn(loginAttemptModel, 'countDocuments').mockResolvedValue(3);
 
       // Act
-      const result = await repository.countRecentAttemptsByIpAddress(
-        ipAddress,
-        timeFrameMinutes,
-      );
+      const result = await repository.countRecentAttemptsByIpAddress(ipAddress, timeFrameMinutes);
 
       // Assert
       expect(countSpy).toHaveBeenCalledWith({

@@ -2,20 +2,11 @@ import { Test } from '@nestjs/testing';
 import { IBookingRepository } from 'src/domain/booking/interfaces/booking.repository';
 import { IUserRepository } from 'src/domain/user/interfaces/user.repository';
 import { mock } from 'jest-mock-extended';
-import { BookingService } from '../../../src/application/booking/booking.service';
-import {
-  Booking,
-  BookingStatus,
-} from '../../../src/domain/booking/booking.entity';
-import {
-  CreateBookingCommand,
-  DeleteBookingCommand,
-} from '../../../src/application/booking/cqrs/commands';
-import { User } from '../../../src/domain/user/user.entity';
-import {
-  GetBookingQuery,
-  GetBookingsQuery,
-} from '../../../src/application/booking/cqrs/queries';
+import { BookingService } from '../../../../src/application/booking/booking.service';
+import { Booking, BookingStatus } from '../../../../src/domain/booking/booking.entity';
+import { CreateBookingCommand, DeleteBookingCommand } from '../../../../src/application/booking/cqrs/commands';
+import { User } from '../../../../src/domain/user/user.entity';
+import { GetBookingQuery, GetBookingsQuery } from '../../../../src/application/booking/cqrs/queries';
 
 describe('BookingService', () => {
   let bookingService: BookingService;
@@ -46,14 +37,9 @@ describe('BookingService', () => {
 
       mockBookingRepository.findByHairdresserAndTimeRange.mockResolvedValue([]);
 
-      const result = await bookingService.isTimeSlotAvailable(
-        date,
-        hairdresser,
-      );
+      const result = await bookingService.isTimeSlotAvailable(date, hairdresser);
 
-      expect(
-        mockBookingRepository.findByHairdresserAndTimeRange,
-      ).toHaveBeenCalled();
+      expect(mockBookingRepository.findByHairdresserAndTimeRange).toHaveBeenCalled();
       expect(result).toBe(true);
     });
 
@@ -62,26 +48,13 @@ describe('BookingService', () => {
       date.setHours(10, 0, 0, 0);
       const hairdresser = 'Test Hairdresser';
 
-      const existingBooking = new Booking(
-        '1',
-        'Test Name',
-        date,
-        hairdresser,
-        BookingStatus.CONFIRMED,
-      );
+      const existingBooking = new Booking('1', 'Test Name', date, hairdresser, BookingStatus.CONFIRMED);
 
-      mockBookingRepository.findByHairdresserAndTimeRange.mockResolvedValue([
-        existingBooking,
-      ]);
+      mockBookingRepository.findByHairdresserAndTimeRange.mockResolvedValue([existingBooking]);
 
-      const result = await bookingService.isTimeSlotAvailable(
-        date,
-        hairdresser,
-      );
+      const result = await bookingService.isTimeSlotAvailable(date, hairdresser);
 
-      expect(
-        mockBookingRepository.findByHairdresserAndTimeRange,
-      ).toHaveBeenCalled();
+      expect(mockBookingRepository.findByHairdresserAndTimeRange).toHaveBeenCalled();
       expect(result).toBe(false);
     });
 
@@ -90,10 +63,7 @@ describe('BookingService', () => {
       date.setHours(8, 0, 0, 0); // Before 9 AM
       const hairdresser = 'Test Hairdresser';
 
-      const result = await bookingService.isTimeSlotAvailable(
-        date,
-        hairdresser,
-      );
+      const result = await bookingService.isTimeSlotAvailable(date, hairdresser);
 
       expect(result).toBe(false);
     });
@@ -127,12 +97,8 @@ describe('BookingService', () => {
 
       const result = await bookingService.createBooking(command);
 
-      expect(mockUserRepository.findByName).toHaveBeenCalledWith(
-        createBookingDto.name,
-      );
-      expect(mockBookingRepository.create).toHaveBeenCalledWith(
-        expect.any(Booking),
-      );
+      expect(mockUserRepository.findByName).toHaveBeenCalledWith(createBookingDto.name);
+      expect(mockBookingRepository.create).toHaveBeenCalledWith(expect.any(Booking));
       expect(result).toEqual(expectedResult);
     });
   });
@@ -140,20 +106,8 @@ describe('BookingService', () => {
   describe('getBookings', () => {
     it('should return all bookings', async () => {
       const expectedResult: Booking[] = [
-        new Booking(
-          '1',
-          'Test Name 1',
-          new Date(),
-          'Test Hairdresser',
-          BookingStatus.CONFIRMED,
-        ),
-        new Booking(
-          '2',
-          'Test Name 2',
-          new Date(),
-          'Test Hairdresser',
-          BookingStatus.CONFIRMED,
-        ),
+        new Booking('1', 'Test Name 1', new Date(), 'Test Hairdresser', BookingStatus.CONFIRMED),
+        new Booking('2', 'Test Name 2', new Date(), 'Test Hairdresser', BookingStatus.CONFIRMED),
       ];
 
       mockBookingRepository.findAll.mockResolvedValue(expectedResult);
@@ -168,13 +122,7 @@ describe('BookingService', () => {
   describe('getBooking', () => {
     it('should return a booking with the given id', async () => {
       const id = '1';
-      const expectedResult = new Booking(
-        id,
-        'Test Name',
-        new Date(),
-        'Test Hairdresser',
-        BookingStatus.CONFIRMED,
-      );
+      const expectedResult = new Booking(id, 'Test Name', new Date(), 'Test Hairdresser', BookingStatus.CONFIRMED);
 
       mockBookingRepository.findById.mockResolvedValue(expectedResult);
 

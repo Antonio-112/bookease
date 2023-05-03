@@ -82,6 +82,7 @@
       "**/*.(t)s"
     ],
     "coveragePathIgnorePatterns": [
+      "/dist/",
       "/node_modules/",
       "/src/domain/.*entity\\.ts$",
       "/src/infrastructure/.*schema\\.ts$",

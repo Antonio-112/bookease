@@ -12,10 +12,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('login')
-  async login(
-    @Body() loginDto: LoginDto,
-    @Req() req: Request,
-  ): Promise<string> {
+  async login(@Body() loginDto: LoginDto, @Req() req: Request): Promise<string> {
     const ipAddress = req.ip;
     this.logger.debug('ipAddess: ' + ipAddress);
     const query = new GetLoginQuery(loginDto, ipAddress);

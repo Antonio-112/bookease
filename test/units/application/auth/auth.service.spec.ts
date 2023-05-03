@@ -1,16 +1,16 @@
 import { Test } from '@nestjs/testing';
-import { AuthService } from '../../../src/application/auth/auth.service';
-import { IUserRepository } from '../../../src/domain/user/interfaces/user.repository';
-import { ILoginAttemptRepository } from '../../../src/domain/login-attempt/interfaces/login-attempt.repository';
+import { AuthService } from '../../../../src/application/auth/auth.service';
+import { IUserRepository } from '../../../../src/domain/user/interfaces/user.repository';
+import { ILoginAttemptRepository } from '../../../../src/domain/login-attempt/interfaces/login-attempt.repository';
 import { JwtService } from '@nestjs/jwt';
-import { User } from '../../../src/domain/user/user.entity';
+import { User } from '../../../../src/domain/user/user.entity';
 import * as bcrypt from 'bcrypt';
 import { MockProxy, mock } from 'jest-mock-extended';
-import { LoginDto } from '../../../src/application/auth/cqrs/dto/login.dto';
+import { LoginDto } from '../../../../src/application/auth/cqrs/dto/login.dto';
 import { HttpException, HttpStatus } from '@nestjs/common';
-import { CreateRegisterCommand } from '../../../src/application/auth/cqrs/commands';
-import { RegisterDto } from '../../../src/application/auth/cqrs/dto/register.dto';
-import { GetLoginQuery } from '../../../src/application/auth/cqrs/queries';
+import { CreateRegisterCommand } from '../../../../src/application/auth/cqrs/commands';
+import { RegisterDto } from '../../../../src/application/auth/cqrs/dto/register.dto';
+import { GetLoginQuery } from '../../../../src/application/auth/cqrs/queries';
 
 describe('AuthService', () => {
   let authService: AuthService;
@@ -31,12 +31,7 @@ describe('AuthService', () => {
     password: 'password',
   };
 
-  const userMock = new User(
-    '1',
-    'Test User',
-    'test@test.com',
-    'hashed_password',
-  );
+  const userMock = new User('1', 'Test User', 'test@test.com', 'hashed_password');
 
   ///
 
@@ -83,41 +78,25 @@ describe('AuthService', () => {
     it('should return "Invalid password" if the password is incorrect', async () => {
       const query = new GetLoginQuery(loginDto, '127.0.0.1');
       userRepositoryMock.findByEmail.mockResolvedValue(userMock);
-      loginAttemptRepositoryMock.countRecentAttemptsByEmail.mockResolvedValue(
-        0,
-      );
-      loginAttemptRepositoryMock.countRecentAttemptsByIpAddress.mockResolvedValue(
-        0,
-      );
+      loginAttemptRepositoryMock.countRecentAttemptsByEmail.mockResolvedValue(0);
+      loginAttemptRepositoryMock.countRecentAttemptsByIpAddress.mockResolvedValue(0);
 
-      const bcryptCompareSpy = jest
-        .spyOn(bcrypt, 'compare')
-        .mockResolvedValue(false);
+      const bcryptCompareSpy = jest.spyOn(bcrypt, 'compare').mockResolvedValue(false);
 
       const result = await authService.login(query);
 
       expect(result).toBe('Invalid password');
-      expect(bcryptCompareSpy).toHaveBeenCalledWith(
-        loginDto.password,
-        userMock.password,
-      );
+      expect(bcryptCompareSpy).toHaveBeenCalledWith(loginDto.password, userMock.password);
     });
 
     it('should throw an error if there are too many failed login attempts', async () => {
       const query = new GetLoginQuery(loginDto, '127.0.0.1');
       userRepositoryMock.findByEmail.mockResolvedValue(userMock);
-      loginAttemptRepositoryMock.countRecentAttemptsByEmail.mockResolvedValue(
-        5,
-      );
-      loginAttemptRepositoryMock.countRecentAttemptsByIpAddress.mockResolvedValue(
-        0,
-      );
+      loginAttemptRepositoryMock.countRecentAttemptsByEmail.mockResolvedValue(5);
+      loginAttemptRepositoryMock.countRecentAttemptsByIpAddress.mockResolvedValue(0);
 
       await expect(authService.login(query)).rejects.toThrow(
-        new HttpException(
-          'Too many failed login attempts. Please try again later.',
-          HttpStatus.TOO_MANY_REQUESTS,
-        ),
+        new HttpException('Too many failed login attempts. Please try again later.', HttpStatus.TOO_MANY_REQUESTS),
       );
     });
 
@@ -125,12 +104,8 @@ describe('AuthService', () => {
       const query = new GetLoginQuery(loginDto, '127.0.0.1');
 
       userRepositoryMock.findByEmail.mockResolvedValue(userMock);
-      loginAttemptRepositoryMock.countRecentAttemptsByEmail.mockResolvedValue(
-        0,
-      );
-      loginAttemptRepositoryMock.countRecentAttemptsByIpAddress.mockResolvedValue(
-        0,
-      );
+      loginAttemptRepositoryMock.countRecentAttemptsByEmail.mockResolvedValue(0);
+      loginAttemptRepositoryMock.countRecentAttemptsByIpAddress.mockResolvedValue(0);
       jest.spyOn(bcrypt, 'compare').mockResolvedValue(true);
       jwtServiceMock.sign.mockReturnValue('jwt_token');
 
@@ -146,29 +121,18 @@ describe('AuthService', () => {
 
   describe('register', () => {
     it('should throw an error if email is already in use', async () => {
-      const existingUser = new User(
-        '',
-        'Test User',
-        'test@test.com',
-        'hashed_password',
-      );
+      const existingUser = new User('', 'Test User', 'test@test.com', 'hashed_password');
       userRepositoryMock.findByEmail.mockResolvedValue(existingUser);
 
       const command = new CreateRegisterCommand(registerDtoMock);
 
-      await expect(authService.register(command)).rejects.toThrowError(
-        'Email already in use',
-      );
+      await expect(authService.register(command)).rejects.toThrowError('Email already in use');
     });
 
     it('should successfully register a new user', async () => {
       userRepositoryMock.findByEmail.mockResolvedValue(null);
-      userRepositoryMock.create.mockImplementation((user: User) =>
-        Promise.resolve(user),
-      );
-      const bcryptHashSpy = jest
-        .spyOn(bcrypt, 'hash')
-        .mockResolvedValue('hashed_password');
+      userRepositoryMock.create.mockImplementation((user: User) => Promise.resolve(user));
+      const bcryptHashSpy = jest.spyOn(bcrypt, 'hash').mockResolvedValue('hashed_password');
 
       const command = new CreateRegisterCommand(registerDtoMock);
       const result = await authService.register(command);
@@ -192,15 +156,11 @@ describe('AuthService', () => {
 
     it('should throw an error when password hashing fails', async () => {
       userRepositoryMock.findByEmail.mockResolvedValue(null);
-      const bcryptHashSpy = jest
-        .spyOn(bcrypt, 'hash')
-        .mockRejectedValue(new Error('Hashing failed'));
+      const bcryptHashSpy = jest.spyOn(bcrypt, 'hash').mockRejectedValue(new Error('Hashing failed'));
 
       const command = new CreateRegisterCommand(registerDtoMock);
 
-      await expect(authService.register(command)).rejects.toThrowError(
-        'Hashing failed',
-      );
+      await expect(authService.register(command)).rejects.toThrowError('Hashing failed');
       expect(bcryptHashSpy).toHaveBeenCalled();
     });
   });

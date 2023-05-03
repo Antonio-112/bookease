@@ -1,12 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { AuthController } from '../../../src/application/auth/auth.controller';
-import { AuthService } from '../../../src/application/auth/auth.service';
-import { LoginDto } from '../../../src/application/auth/cqrs/dto/login.dto';
-import { RegisterDto } from '../../../src/application/auth/cqrs/dto/register.dto';
+import { AuthController } from '../../../../src/application/auth/auth.controller';
+import { AuthService } from '../../../../src/application/auth/auth.service';
+import { LoginDto, RegisterDto } from '../../../../src/application/auth/cqrs/dto';
 import { mock, MockProxy } from 'jest-mock-extended';
-import { User } from '../../../src/domain/user/user.entity';
-import { GetLoginQuery } from '../../../src/application/auth/cqrs/queries';
-import { CreateRegisterCommand } from '../../../src/application/auth/cqrs/commands';
+import { User } from '../../../../src/domain/user/user.entity';
+import { GetLoginQuery } from '../../../../src/application/auth/cqrs/queries';
+import { CreateRegisterCommand } from '../../../../src/application/auth/cqrs/commands';
 
 describe('AuthController', () => {
   let controller: AuthController;
@@ -47,9 +46,7 @@ describe('AuthController', () => {
       const result = await controller.login(loginDto, req as any);
 
       expect(result).toEqual(expectedResult);
-      expect(authService.login).toHaveBeenCalledWith(
-        new GetLoginQuery(loginDto, ipAddress),
-      );
+      expect(authService.login).toHaveBeenCalledWith(new GetLoginQuery(loginDto, ipAddress));
     });
   });
 
@@ -71,9 +68,7 @@ describe('AuthController', () => {
       const result = await controller.register(registerDto);
 
       expect(result).toEqual(expectedResult);
-      expect(authService.register).toHaveBeenCalledWith(
-        new CreateRegisterCommand(registerDto),
-      );
+      expect(authService.register).toHaveBeenCalledWith(new CreateRegisterCommand(registerDto));
     });
   });
 });

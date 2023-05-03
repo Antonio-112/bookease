@@ -1,17 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { BookingController } from '../../../src/application/booking/booking.controller';
-import { BookingService } from '../../../src/application/booking/booking.service';
+import { BookingController } from '../../../../src/application/booking/booking.controller';
+import { BookingService } from '../../../../src/application/booking/booking.service';
 import { mock } from 'jest-mock-extended';
-import {
-  CreateBookingDto,
-  UpdateBookingDto,
-} from '../../../src/application/booking/cqrs/dtos';
-import {
-  Booking,
-  BookingStatus,
-} from '../../../src/domain/booking/booking.entity';
-import { UpdateBookingCommand } from '../../../src/application/booking/cqrs/commands';
-import { GetBookingQuery } from '../../../src/application/booking/cqrs/queries';
+import { CreateBookingDto, UpdateBookingDto } from '../../../../src/application/booking/cqrs/dtos';
+import { Booking, BookingStatus } from '../../../../src/domain/booking/booking.entity';
+import { UpdateBookingCommand } from '../../../../src/application/booking/cqrs/commands';
+import { GetBookingQuery } from '../../../../src/application/booking/cqrs/queries';
 
 const mockBookingService = mock<BookingService>();
 
@@ -52,13 +46,9 @@ describe('BookingController', () => {
   describe('createBooking', () => {
     it('should call createBooking with correct parameters and return the result', async () => {
       const expectedResult = { id: '1', ...createBookingDtoMock };
-      mockBookingService.createBooking.mockResolvedValue(
-        expectedResult as Booking,
-      );
+      mockBookingService.createBooking.mockResolvedValue(expectedResult as Booking);
 
-      const result = await bookingController.createBooking(
-        createBookingDtoMock,
-      );
+      const result = await bookingController.createBooking(createBookingDtoMock);
 
       /* expect(bookingService.createBooking).toHaveBeenCalledWith(
         expect.(createBookingDto),
@@ -86,9 +76,7 @@ describe('BookingController', () => {
         },
       ];
 
-      mockBookingService.getBookings.mockResolvedValue(
-        expectedResult as Booking[],
-      );
+      mockBookingService.getBookings.mockResolvedValue(expectedResult as Booking[]);
 
       const result = await bookingController.getBookings();
 
@@ -101,24 +89,14 @@ describe('BookingController', () => {
     it('should call getBooking with correct id and return the result', async () => {
       const id = '1';
 
-      const expectedResult = new Booking(
-        id,
-        'Test Name',
-        new Date(),
-        'Test Hairdresser',
-        BookingStatus.CONFIRMED,
-      );
+      const expectedResult = new Booking(id, 'Test Name', new Date(), 'Test Hairdresser', BookingStatus.CONFIRMED);
 
       const getBookingQuery = new GetBookingQuery(id);
-      mockBookingService.getBooking.mockReturnValue(
-        Promise.resolve(expectedResult),
-      );
+      mockBookingService.getBooking.mockReturnValue(Promise.resolve(expectedResult));
 
       const result = await bookingController.getBooking(id);
 
-      expect(mockBookingService.getBooking).toHaveBeenCalledWith(
-        getBookingQuery,
-      );
+      expect(mockBookingService.getBooking).toHaveBeenCalledWith(getBookingQuery);
       expect(result).toEqual(expectedResult);
     });
   });
@@ -141,22 +119,12 @@ describe('BookingController', () => {
         updateBookingDto.status,
       );
 
-      const updateBookingCommand = new UpdateBookingCommand(
-        id,
-        updateBookingDto,
-      );
-      mockBookingService.updateBooking.mockReturnValue(
-        Promise.resolve(expectedResult),
-      );
+      const updateBookingCommand = new UpdateBookingCommand(id, updateBookingDto);
+      mockBookingService.updateBooking.mockReturnValue(Promise.resolve(expectedResult));
 
-      const result = await bookingController.updateBooking(
-        id,
-        updateBookingDto,
-      );
+      const result = await bookingController.updateBooking(id, updateBookingDto);
 
-      expect(mockBookingService.updateBooking).toHaveBeenCalledWith(
-        updateBookingCommand,
-      );
+      expect(mockBookingService.updateBooking).toHaveBeenCalledWith(updateBookingCommand);
       expect(result).toEqual(expectedResult);
     });
   });

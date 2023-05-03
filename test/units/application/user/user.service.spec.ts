@@ -4,16 +4,13 @@ import {
   UpdateUserCommand,
   DeleteUserCommand,
   UpdatePasswordCommand,
-} from '../../../src/application/user/cqrs/commands';
+} from '../../../../src/application/user/cqrs/commands';
 import { mock, MockProxy } from 'jest-mock-extended';
 import { hash } from 'bcrypt';
-import {
-  GetUserQuery,
-  GetUsersQuery,
-} from '../../../src/application/user/cqrs/queries';
-import { UserService } from '../../../src/application/user/user.service';
-import { IUserRepository } from '../../../src/domain/user/interfaces/user.repository';
-import { User } from '../../../src/domain/user/user.entity';
+import { GetUserQuery, GetUsersQuery } from '../../../../src/application/user/cqrs/queries';
+import { UserService } from '../../../../src/application/user/user.service';
+import { IUserRepository } from '../../../../src/domain/user/interfaces/user.repository';
+import { User } from '../../../../src/domain/user/user.entity';
 
 describe('UserService', () => {
   let service: UserService;
@@ -47,21 +44,14 @@ describe('UserService', () => {
         password: 'password123',
       };
 
-      const expectedResult: User = new User(
-        '1',
-        'John Doe',
-        'john@example.com',
-        'password123',
-      );
+      const expectedResult: User = new User('1', 'John Doe', 'john@example.com', 'password123');
 
       userRepository.create.mockResolvedValue(expectedResult);
 
       const result = await service.create(new CreateUserCommand(createUserDto));
 
       expect(result).toEqual(expectedResult);
-      expect(userRepository.create).toHaveBeenCalledWith(
-        expect.objectContaining(createUserDto),
-      );
+      expect(userRepository.create).toHaveBeenCalledWith(expect.objectContaining(createUserDto));
     });
   });
 
@@ -85,12 +75,7 @@ describe('UserService', () => {
   describe('findById', () => {
     it('should return a user by id', async () => {
       const id = '1';
-      const expectedResult: User = new User(
-        id,
-        'John Doe',
-        'john@example.com',
-        'password123',
-      );
+      const expectedResult: User = new User(id, 'John Doe', 'john@example.com', 'password123');
 
       userRepository.findById.mockResolvedValue(expectedResult);
 
@@ -110,18 +95,11 @@ describe('UserService', () => {
         password: 'password456',
       };
 
-      const expectedResult: User = new User(
-        id,
-        'Jane Doe',
-        'jane@example.com',
-        'password456',
-      );
+      const expectedResult: User = new User(id, 'Jane Doe', 'jane@example.com', 'password456');
 
       userRepository.update.mockResolvedValue(expectedResult);
 
-      const result = await service.update(
-        new UpdateUserCommand(id, updateUserDto),
-      );
+      const result = await service.update(new UpdateUserCommand(id, updateUserDto));
 
       expect(result).toEqual(expectedResult);
       expect(userRepository.update).toHaveBeenCalledWith(id, expect.any(User));
@@ -147,26 +125,16 @@ describe('UserService', () => {
       const id = '1';
       const oldPassword = 'oldPassword123';
       const newPassword = 'newPassword123';
-      const user = new User(
-        id,
-        'John Doe',
-        'john@example.com',
-        await hash(oldPassword, 10),
-      );
+      const user = new User(id, 'John Doe', 'john@example.com', await hash(oldPassword, 10));
 
       userRepository.findById.mockResolvedValue(user);
       userRepository.updatePassword.mockResolvedValue(true);
 
-      const result = await service.updatePassword(
-        new UpdatePasswordCommand(id, newPassword, oldPassword),
-      );
+      const result = await service.updatePassword(new UpdatePasswordCommand(id, newPassword, oldPassword));
 
       expect(result).toBeTruthy();
       expect(userRepository.findById).toHaveBeenCalledWith(id);
-      expect(userRepository.updatePassword).toHaveBeenCalledWith(
-        id,
-        expect.any(String),
-      );
+      expect(userRepository.updatePassword).toHaveBeenCalledWith(id, expect.any(String));
     });
   });
 });
