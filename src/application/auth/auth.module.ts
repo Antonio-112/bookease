@@ -3,12 +3,12 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { UserModule } from '../user/user.module';
 import { AuthController } from './auth.controller';
-import { JwtStrategy } from './strategies/jwt.strategy'; // Asegúrate de que esto esté importado
+import { JwtStrategy } from './strategies/jwt.strategy';
 import { JwtAuthGuard } from './guard/jwt-auth.guard';
 import { AuthService } from './auth.service';
-import { MongoModule } from 'src/infrastructure/mongo/mongo.module';
+import { MongoModule } from '../../infrastructure/mongo/mongo.module';
 
-const providers: Provider[] = [JwtAuthGuard, AuthService, JwtStrategy]; // Asegúrate de que JwtStrategy esté en los proveedores
+const providers: Provider[] = [JwtAuthGuard, AuthService, JwtStrategy];
 @Module({
   imports: [
     forwardRef(() => UserModule),

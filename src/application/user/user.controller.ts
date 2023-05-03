@@ -59,7 +59,6 @@ export class UserController {
   }
 
   @Patch('password/:id')
-  // Verificar que el usuario este logeado con el token jwt
   @UseGuards(JwtAuthGuard)
   async updatePassword(
     @Param('id') id: string,

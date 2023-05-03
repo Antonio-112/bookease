@@ -1,7 +1,7 @@
 import { Test } from '@nestjs/testing';
 import { AuthService } from '../../../src/application/auth/auth.service';
 import { IUserRepository } from '../../../src/domain/user/interfaces/user.repository';
-import { ILoginAttemptRepository } from '../../../src/domain/login-attempt/login-attempt.repository';
+import { ILoginAttemptRepository } from '../../../src/domain/login-attempt/interfaces/login-attempt.repository';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '../../../src/domain/user/user.entity';
 import * as bcrypt from 'bcrypt';

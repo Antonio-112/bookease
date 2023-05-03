@@ -3,8 +3,8 @@ import { AuthService } from './auth.service';
 import { LoginDto } from './cqrs/dto/login.dto';
 import { RegisterDto } from './cqrs/dto/register.dto';
 import { Request } from 'express';
-import { CreateRegisterCommand } from './cqrs/commands/create-register.command';
-import { GetLoginQuery } from './cqrs/queries/get-login.query';
+import { CreateRegisterCommand } from './cqrs/commands';
+import { GetLoginQuery } from './cqrs/queries';
 
 @Controller('auth')
 export class AuthController {

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { LoginAttempt } from '../../../domain/login-attempt/login-attempt.entity';
-import { ILoginAttemptRepository } from '../../../domain/login-attempt/login-attempt.repository';
+import { ILoginAttemptRepository } from '../../../domain/login-attempt/interfaces/login-attempt.repository';
 import { Logger } from '@nestjs/common';
 
 @Injectable()
