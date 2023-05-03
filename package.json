@@ -1,6 +1,6 @@
 {
   "name": "bookease-back",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Managing reservations in various types of businesses.",
   "author": "Antonio A.",
   "private": true,
@@ -9,6 +9,7 @@
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
+    "start:repl": "nest start --entryFile repl",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
