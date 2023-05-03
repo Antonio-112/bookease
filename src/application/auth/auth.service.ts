@@ -10,7 +10,7 @@ import { IUserRepository } from '../../domain/user/interfaces/user.repository';
 import * as bcrypt from 'bcrypt';
 import { User } from '../../domain/user/user.entity';
 import { LoginAttempt } from '../../domain/login-attempt/login-attempt.entity';
-import { ILoginAttemptRepository } from '../../domain/login-attempt/login-attempt.repository';
+import { ILoginAttemptRepository } from '../../domain/login-attempt/interfaces/login-attempt.repository';
 import { CreateRegisterCommand } from './cqrs/commands';
 import { GetLoginQuery } from './cqrs/queries';
 

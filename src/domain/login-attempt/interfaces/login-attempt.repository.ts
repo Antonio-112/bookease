@@ -1,4 +1,4 @@
-import { LoginAttempt } from './login-attempt.entity';
+import { LoginAttempt } from '../login-attempt.entity';
 
 export interface ILoginAttemptRepository {
   create(failedLoginAttempt: LoginAttempt): Promise<LoginAttempt>;
