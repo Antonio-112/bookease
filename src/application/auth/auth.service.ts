@@ -1,10 +1,4 @@
-import {
-  HttpException,
-  HttpStatus,
-  Inject,
-  Injectable,
-  Logger,
-} from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { IUserRepository } from '../../domain/user/interfaces/user.repository';
 import * as bcrypt from 'bcrypt';
@@ -45,30 +39,20 @@ export class AuthService {
     }
 
     // Check for failed login attempts by email and IP address
-    const failedAttemptsByEmail =
-      await this.loginAttemptRepository.countRecentAttemptsByEmail(
-        email,
-        this.BLOCK_DURATION_MINUTES,
-      );
-    const failedAttemptsByIpAddress =
-      await this.loginAttemptRepository.countRecentAttemptsByIpAddress(
-        query.ip,
-        this.BLOCK_DURATION_MINUTES,
-      );
-    this.logger.log('Failed login attemps by email: ' + failedAttemptsByEmail);
-    this.logger.log(
-      'Failed attempts by ip address: ' + failedAttemptsByIpAddress,
+    const failedAttemptsByEmail = await this.loginAttemptRepository.countRecentAttemptsByEmail(
+      email,
+      this.BLOCK_DURATION_MINUTES,
     );
+    const failedAttemptsByIpAddress = await this.loginAttemptRepository.countRecentAttemptsByIpAddress(
+      query.ip,
+      this.BLOCK_DURATION_MINUTES,
+    );
+    this.logger.log('Failed login attemps by email: ' + failedAttemptsByEmail);
+    this.logger.log('Failed attempts by ip address: ' + failedAttemptsByIpAddress);
     // If there are too many failed attempts, return an error message
-    if (
-      failedAttemptsByEmail >= this.MAX_FAILED_ATTEMPTS ||
-      failedAttemptsByIpAddress >= this.MAX_FAILED_ATTEMPTS
-    ) {
+    if (failedAttemptsByEmail >= this.MAX_FAILED_ATTEMPTS || failedAttemptsByIpAddress >= this.MAX_FAILED_ATTEMPTS) {
       this.logger.warn('Too many failed login attempts for email: ' + email);
-      throw new HttpException(
-        'Too many failed login attempts. Please try again later.',
-        HttpStatus.TOO_MANY_REQUESTS,
-      );
+      throw new HttpException('Too many failed login attempts. Please try again later.', HttpStatus.TOO_MANY_REQUESTS);
     }
 
     // Verify the password using bcrypt
@@ -76,9 +60,7 @@ export class AuthService {
 
     // If the password is invalid, add a failed login attempt and return an error message
     if (!isPasswordValid) {
-      await this.loginAttemptRepository.create(
-        new LoginAttempt(null, email, query.ip, new Date()),
-      );
+      await this.loginAttemptRepository.create(new LoginAttempt(null, email, query.ip, new Date()));
       this.logger.debug('Invalid password for email: ' + email);
       return 'Invalid password';
     }

@@ -13,9 +13,7 @@ import { UserNotFoundException } from './exceptions/user-not-found.exception';
 export class UserService {
   private readonly logger = new Logger(UserService.name);
 
-  constructor(
-    @Inject('IUserRepository') private readonly userRepository: IUserRepository,
-  ) {}
+  constructor(@Inject('IUserRepository') private readonly userRepository: IUserRepository) {}
 
   async create(command: CreateUserCommand): Promise<User> {
     // Destructuracion
@@ -48,9 +46,7 @@ export class UserService {
 
     if (isSamePassword) {
       // Error de contraseña no pueden ser iguales
-      throw new Error(
-        'New password cannot be the same as the current password.',
-      );
+      throw new Error('New password cannot be the same as the current password.');
     }
 
     // Hash the new password

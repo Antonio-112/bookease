@@ -29,6 +29,7 @@
     "@nestjs/mongoose": "^9.2.2",
     "@nestjs/passport": "^9.0.3",
     "@nestjs/platform-express": "^9.4.0",
+    "@nestjs/throttler": "^4.0.0",
     "@types/passport-jwt": "^3.0.8",
     "bcrypt": "^5.1.0",
     "class-transformer": "^0.5.1",
@@ -82,6 +83,7 @@
       "**/*.(t)s"
     ],
     "coveragePathIgnorePatterns": [
+      "/dist/",
       "/node_modules/",
       "/src/domain/.*entity\\.ts$",
       "/src/infrastructure/.*schema\\.ts$",
@@ -98,5 +100,4 @@
     },
     "testEnvironment": "node"
   }
-  
 }

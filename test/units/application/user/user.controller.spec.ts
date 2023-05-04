@@ -1,22 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserController } from '../../../src/application/user/user.controller';
-import { UserService } from '../../../src/application/user/user.service';
-import {
-  CreateUserDto,
-  UpdateUserDto,
-  UpdatePasswordDto,
-} from '../../../src/application/user/cqrs/dtos';
-import { User } from '../../../src/domain/user/user.entity';
+import { UserController } from '../../../../src/application/user/user.controller';
+import { UserService } from '../../../../src/application/user/user.service';
+import { CreateUserDto, UpdateUserDto, UpdatePasswordDto } from '../../../../src/application/user/cqrs/dtos';
+import { User } from '../../../../src/domain/user/user.entity';
 import {
   CreateUserCommand,
   UpdatePasswordCommand,
   UpdateUserCommand,
   DeleteUserCommand,
-} from '../../../src/application/user/cqrs/commands';
-import {
-  GetUserQuery,
-  GetUsersQuery,
-} from '../../../src/application/user/cqrs/queries';
+} from '../../../../src/application/user/cqrs/commands';
+import { GetUserQuery, GetUsersQuery } from '../../../../src/application/user/cqrs/queries';
 import { mock, MockProxy } from 'jest-mock-extended';
 
 describe('UserController', () => {
@@ -62,9 +55,7 @@ describe('UserController', () => {
       const result = await controller.create(createUserDto);
 
       expect(result).toEqual(expectedResult);
-      expect(userService.create).toHaveBeenCalledWith(
-        new CreateUserCommand(createUserDto),
-      );
+      expect(userService.create).toHaveBeenCalledWith(new CreateUserCommand(createUserDto));
     });
   });
 
@@ -126,9 +117,7 @@ describe('UserController', () => {
       const result = await controller.update(id, updateUserDto);
 
       expect(result).toEqual(expectedResult);
-      expect(userService.update).toHaveBeenCalledWith(
-        new UpdateUserCommand(id, updateUserDto),
-      );
+      expect(userService.update).toHaveBeenCalledWith(new UpdateUserCommand(id, updateUserDto));
     });
   });
 
@@ -142,9 +131,7 @@ describe('UserController', () => {
       const result = await controller.delete(id);
 
       expect(result).toEqual(expectedResult);
-      expect(userService.delete).toHaveBeenCalledWith(
-        new DeleteUserCommand(id),
-      );
+      expect(userService.delete).toHaveBeenCalledWith(new DeleteUserCommand(id));
     });
   });
 
@@ -163,11 +150,7 @@ describe('UserController', () => {
 
       expect(result).toEqual(expectedResult);
       expect(userService.updatePassword).toHaveBeenCalledWith(
-        new UpdatePasswordCommand(
-          id,
-          updatePasswordDto.newPassword,
-          updatePasswordDto.oldPassword,
-        ),
+        new UpdatePasswordCommand(id, updatePasswordDto.newPassword, updatePasswordDto.oldPassword),
       );
     });
   });

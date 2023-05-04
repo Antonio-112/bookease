@@ -3,13 +3,23 @@ import { BookingModule } from './application/booking/booking.module';
 import { UserModule } from './application/user/user.module';
 import { AuthModule } from './application/auth/auth.module';
 import { MongoModule } from './infrastructure/mongo/mongo.module';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
+    ThrottlerModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        ttl: config.get('THROTTLE_TTL'),
+        limit: config.get('THROTTLE_LIMIT'),
+      }),
+    }),
     ConfigModule.forRoot({
       ignoreEnvFile: false,
       isGlobal: true,
+      cache: true,
     }),
     MongoModule,
     AuthModule,
