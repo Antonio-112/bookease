@@ -7,6 +7,8 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { JwtAuthGuard } from './guard/jwt-auth.guard';
 import { AuthService } from './auth.service';
 import { MongoModule } from '../../infrastructure/mongo/mongo.module';
+import { ThrottlerGuard } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
 
 const providers: Provider[] = [JwtAuthGuard, AuthService, JwtStrategy];
 @Module({
@@ -21,7 +23,13 @@ const providers: Provider[] = [JwtAuthGuard, AuthService, JwtStrategy];
     }),
   ],
   controllers: [AuthController],
-  providers: [...providers],
+  providers: [
+    ...providers,
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+  ],
   exports: [...providers],
 })
 export class AuthModule {}

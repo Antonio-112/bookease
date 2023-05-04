@@ -7,18 +7,10 @@ import { IBookingRepository } from '../../../domain/booking/interfaces/booking.r
 @Injectable()
 export class BookingRepository implements IBookingRepository {
   private readonly logger = new Logger(BookingRepository.name);
-  constructor(
-    @InjectModel('Booking') private readonly bookingModel: Model<Booking>,
-  ) {}
+  constructor(@InjectModel('Booking') private readonly bookingModel: Model<Booking>) {}
 
   private mapToBookingEntity(doc: any): Booking {
-    return new Booking(
-      doc._id,
-      doc.name,
-      doc.date,
-      doc.hairdresser,
-      doc.status,
-    );
+    return new Booking(doc._id, doc.name, doc.date, doc.hairdresser, doc.status);
   }
 
   async create(booking: Booking): Promise<Booking> {
@@ -49,9 +41,7 @@ export class BookingRepository implements IBookingRepository {
   }
 
   async update(id: string, booking: Booking): Promise<Booking> {
-    const doc = await this.bookingModel
-      .findByIdAndUpdate(id, booking, { new: true })
-      .exec();
+    const doc = await this.bookingModel.findByIdAndUpdate(id, booking, { new: true }).exec();
     return this.mapToBookingEntity(doc);
   }
 
@@ -59,11 +49,7 @@ export class BookingRepository implements IBookingRepository {
     await this.bookingModel.findByIdAndDelete(id).exec();
   }
 
-  async findByHairdresserAndTimeRange(
-    hairdresser: string,
-    startTime: Date,
-    endTime: Date,
-  ): Promise<Booking[]> {
+  async findByHairdresserAndTimeRange(hairdresser: string, startTime: Date, endTime: Date): Promise<Booking[]> {
     const docs = await this.bookingModel
       .find({
         hairdresser: hairdresser,
@@ -105,9 +91,7 @@ export class BookingRepository implements IBookingRepository {
       throw new Error('Booking not found');
     }
 
-    const doc = await this.bookingModel
-      .findByIdAndUpdate(id, { status: status }, { new: true })
-      .exec();
+    const doc = await this.bookingModel.findByIdAndUpdate(id, { status: status }, { new: true }).exec();
 
     return this.mapToBookingEntity(doc);
   }

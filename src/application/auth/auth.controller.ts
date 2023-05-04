@@ -1,4 +1,5 @@
 import { Controller, Post, Body, Req, Logger } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
 import { AuthService } from './auth.service';
 import { LoginDto } from './cqrs/dto/login.dto';
 import { RegisterDto } from './cqrs/dto/register.dto';
@@ -11,6 +12,7 @@ export class AuthController {
   private readonly logger = new Logger(AuthController.name);
   constructor(private readonly authService: AuthService) {}
 
+  @Throttle(5, 10)
   @Post('login')
   async login(@Body() loginDto: LoginDto, @Req() req: Request): Promise<string> {
     const ipAddress = req.ip;
@@ -19,6 +21,7 @@ export class AuthController {
     return this.authService.login(query);
   }
 
+  @Throttle(3, 30)
   @Post('register')
   async register(@Body() registerDto: RegisterDto) {
     const command = new CreateRegisterCommand(registerDto);
