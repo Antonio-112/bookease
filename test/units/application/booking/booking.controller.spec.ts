@@ -20,8 +20,12 @@ describe('BookingController', () => {
     date: new Date(),
     hairdresser: 'Test Hairdresser',
     status: BookingStatus.CONFIRMED,
+    service: [],
+    price: 0,
+    duration: 0,
+    note: '',
+    phoneNumber: '',
   };
-
   //
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -89,7 +93,18 @@ describe('BookingController', () => {
     it('should call getBooking with correct id and return the result', async () => {
       const id = '1';
 
-      const expectedResult = new Booking(id, 'Test Name', new Date(), 'Test Hairdresser', BookingStatus.CONFIRMED);
+      const expectedResult = new Booking(
+        id,
+        'Test Name',
+        new Date(),
+        'Test Hairdresser',
+        BookingStatus.CONFIRMED,
+        [],
+        0,
+        0,
+        '',
+        '',
+      );
 
       const getBookingQuery = new GetBookingQuery(id);
       mockBookingService.getBooking.mockReturnValue(Promise.resolve(expectedResult));
@@ -108,6 +123,11 @@ describe('BookingController', () => {
         name: 'Updated Test Name',
         date: new Date(),
         hairdresser: 'Updated Test Hairdresser',
+        duration: 10,
+        note: '',
+        phoneNumber: '',
+        price: 0,
+        service: [''],
         status: BookingStatus.CANCELLED,
       };
 
@@ -117,6 +137,11 @@ describe('BookingController', () => {
         updateBookingDto.date,
         updateBookingDto.hairdresser,
         updateBookingDto.status,
+        updateBookingDto.service,
+        updateBookingDto.price,
+        updateBookingDto.duration,
+        updateBookingDto.note,
+        updateBookingDto.phoneNumber,
       );
 
       const updateBookingCommand = new UpdateBookingCommand(id, updateBookingDto);
