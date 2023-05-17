@@ -5,6 +5,7 @@ import { AuthModule } from './application/auth/auth.module';
 import { MongoModule } from './infrastructure/mongo/mongo.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { BookingServiceModule } from './application/booking-service/booking-services.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
     MongoModule,
     AuthModule,
     BookingModule,
+    BookingServiceModule,
     UserModule,
   ],
 })
