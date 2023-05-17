@@ -37,18 +37,53 @@ export class Booking {
    */
   private readonly _status: BookingStatus;
 
+  /**
+   * Service requested for the booking.
+   */
+  private readonly _service: string[];
+
+  /**
+   * Price of the service requested.
+   */
+  private readonly _price: number;
+
+  /**
+   * Duration of the service in minutes.
+   */
+  private readonly _duration: number;
+
+  /**
+   * Additional notes for the booking.
+   */
+  private readonly _note: string;
+
+  /**
+   * Phone number of the customer.
+   */
+  private readonly _phoneNumber: string;
+
   constructor(
     id: string,
     name: string,
     date: Date,
     hairdresser: string,
     status: BookingStatus,
+    service: string[],
+    price: number,
+    duration: number,
+    note: string,
+    phoneNumber: string,
   ) {
     this._id = id;
     this._name = name;
     this._date = date;
     this._hairdresser = hairdresser;
     this._status = status;
+    this._service = service;
+    this._price = price;
+    this._duration = duration;
+    this._note = note;
+    this._phoneNumber = phoneNumber;
   }
 
   get id(): string {
@@ -69,5 +104,25 @@ export class Booking {
 
   get status(): BookingStatus {
     return this._status;
+  }
+
+  get service(): string[] {
+    return this._service;
+  }
+
+  get price(): number {
+    return this._price;
+  }
+
+  get duration(): number {
+    return this._duration;
+  }
+
+  get note(): string {
+    return this._note;
+  }
+
+  get phoneNumber(): string {
+    return this._phoneNumber;
   }
 }
