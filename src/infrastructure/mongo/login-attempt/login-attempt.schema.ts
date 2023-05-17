@@ -1,12 +1,15 @@
-import { Schema } from '@nestjs/mongoose';
-import { LoginAttempt } from '../../../domain/login-attempt/login-attempt.entity';
-import * as mongoose from 'mongoose';
-@Schema({ timestamps: { createdAt: 'createdAt' } })
-export class LoginAttemptDocument extends LoginAttempt {}
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
-export const LoginAttemptSchema = new mongoose.Schema({
-  id: String,
-  email: String,
-  ipAddress: String,
-  createdAt: Date,
-});
+@Schema()
+export class LoginAttempt {
+  @Prop({ type: String, required: true })
+  id: string;
+  @Prop({ type: String, required: true })
+  email: string;
+  @Prop({ type: String, required: true })
+  ipAddress: string;
+  @Prop({ type: Date, required: true })
+  createdAt: Date;
+}
+
+export const LoginAttemptSchema = SchemaFactory.createForClass(LoginAttempt);

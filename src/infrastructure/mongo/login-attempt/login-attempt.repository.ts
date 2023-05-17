@@ -31,13 +31,8 @@ export class LoginAttemptRepository implements ILoginAttemptRepository {
   }
 
   // Count recent failed login attempts by email within the specified time frame
-  async countRecentAttemptsByEmail(
-    email: string,
-    timeFrameMinutes: number,
-  ): Promise<number> {
-    this.logger.debug(
-      `Counting recent login attempts by email: ${email} within the past ${timeFrameMinutes} minutes`,
-    );
+  async countRecentAttemptsByEmail(email: string, timeFrameMinutes: number): Promise<number> {
+    this.logger.debug(`Counting recent login attempts by email: ${email} within the past ${timeFrameMinutes} minutes`);
     const timeFrameDate = new Date(Date.now() - timeFrameMinutes * 60 * 1000);
     return this.loginAttemptModel.countDocuments({
       email,
@@ -46,10 +41,7 @@ export class LoginAttemptRepository implements ILoginAttemptRepository {
   }
 
   // Count recent failed login attempts by IP address within the specified time frame
-  async countRecentAttemptsByIpAddress(
-    ipAddress: string,
-    timeFrameMinutes: number,
-  ): Promise<number> {
+  async countRecentAttemptsByIpAddress(ipAddress: string, timeFrameMinutes: number): Promise<number> {
     this.logger.debug(
       `Counting recent login attempts by IP address: ${ipAddress} within the past ${timeFrameMinutes} minutes`,
     );

@@ -10,6 +10,9 @@ import { LoginAttempt } from '../../domain/login-attempt/login-attempt.entity';
 import { BookingRepository } from './booking/booking.repository';
 import { Booking } from '../../domain/booking/booking.entity';
 import { BookingSchema } from './booking/booking.schema';
+import { BookingServiceSchema } from './booking-services/booking-service.schema';
+import { BookingServiceRepository } from './booking-services/booking-service.repository';
+import { BookingServices } from 'src/domain/booking-service/booking-service.entity';
 
 const mongoProviders: Provider[] = [
   {
@@ -23,6 +26,10 @@ const mongoProviders: Provider[] = [
   {
     provide: 'IBookingRepository',
     useClass: BookingRepository,
+  },
+  {
+    provide: 'IBookingServiceRepository',
+    useClass: BookingServiceRepository,
   },
 ];
 
@@ -40,6 +47,7 @@ const mongoProviders: Provider[] = [
       { name: User.name, schema: UserSchema },
       { name: LoginAttempt.name, schema: LoginAttemptSchema },
       { name: Booking.name, schema: BookingSchema },
+      { name: BookingServices.name, schema: BookingServiceSchema },
     ]),
   ],
   controllers: [],
