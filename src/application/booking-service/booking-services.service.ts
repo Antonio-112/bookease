@@ -7,7 +7,7 @@ import {
   GetBookingServicesQuery,
   UpdateBookingServiceCommand,
 } from './cqrs';
-import { BookingServices } from 'src/domain/booking-service/booking-service.entity';
+import { BookingServices } from '../../domain/booking-service/booking-service.entity';
 @Injectable()
 export class BookingServicesService {
   private readonly logger = new Logger(BookingServicesService.name);

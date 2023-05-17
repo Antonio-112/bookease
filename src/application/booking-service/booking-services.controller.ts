@@ -9,7 +9,7 @@ import {
 } from './cqrs';
 import { CreateBookingServiceDto } from './cqrs/dtos/create-booking-service.dto';
 import { UpdateBookingServiceDto } from './cqrs/dtos/update-booking-service.dto';
-import { BookingServices } from 'src/domain/booking-service/booking-service.entity';
+import { BookingServices } from '../../domain/booking-service/booking-service.entity';
 
 @Controller('booking-service')
 export class BookingServiceController {

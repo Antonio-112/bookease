@@ -3,7 +3,7 @@ import { ThrottlerGuard } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { BookingServiceController } from './booking-services.controller';
 import { BookingServicesService } from './booking-services.service';
-import { MongoModule } from 'src/infrastructure/mongo/mongo.module';
+import { MongoModule } from '../../infrastructure/mongo/mongo.module';
 
 const provider: Provider[] = [BookingServicesService];
 @Module({

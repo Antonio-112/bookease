@@ -12,7 +12,7 @@ import { Booking } from '../../domain/booking/booking.entity';
 import { BookingSchema } from './booking/booking.schema';
 import { BookingServiceSchema } from './booking-services/booking-service.schema';
 import { BookingServiceRepository } from './booking-services/booking-service.repository';
-import { BookingServices } from 'src/domain/booking-service/booking-service.entity';
+import { BookingServices } from '../../domain/booking-service/booking-service.entity';
 
 const mongoProviders: Provider[] = [
   {

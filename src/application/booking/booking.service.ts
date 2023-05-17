@@ -3,16 +3,16 @@ import { Booking } from '../../domain/booking/booking.entity';
 import { CreateBookingCommand } from './cqrs/commands/create-booking.command';
 import { UpdateBookingCommand } from './cqrs/commands/update-booking.command';
 import { DeleteBookingCommand } from './cqrs/commands/delete-booking.command';
-import { IBookingRepository } from 'src/domain/booking/interfaces/booking.repository';
+import { IBookingRepository } from '../../domain/booking/interfaces/booking.repository';
 import { IUserRepository } from '../../domain/user/interfaces/user.repository';
 import { GetBookingQuery } from './cqrs/queries/get-booking.query';
 import { GetBookingsQuery } from './cqrs/queries/get-bookings.query';
 import { GetBookingByTimeRangeQuery } from './cqrs/queries/get-booking-by-time-range.query';
 import { GetBookingByStatusQuery } from './cqrs/queries/get-booking-by-status.query';
 import { UpdateBookingStatusCommand } from './cqrs/commands/update-booking-status.command';
-import { BookingServices } from 'src/domain/booking-service/booking-service.entity';
+// import { BookingServices } from '../../domain/booking-service/booking-service.entity';
 import { ConfigService } from '@nestjs/config';
-import { IBookingServiceRepository } from 'src/domain/booking-service/interfaces/booking-service.repository';
+import { IBookingServiceRepository } from '../../domain/booking-service/interfaces/booking-service.repository';
 
 @Injectable()
 export class BookingService {
@@ -79,6 +79,7 @@ export class BookingService {
     this.logger.verbose('No matching time slot found');
     return false;
   }
+
   async calculatePriceAndDuration(services: string[]): Promise<{ price: number; duration: number }> {
     const data = {
       price: 0,

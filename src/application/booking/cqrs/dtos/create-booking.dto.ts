@@ -10,13 +10,12 @@ import {
   ArrayMinSize,
   ArrayNotEmpty,
   IsArray,
-  ValidateNested,
-  IsDate,
+  // ValidateNested,
   IsDateString,
 } from 'class-validator';
 import { BookingStatus } from '../../../../domain/booking/booking.entity';
-import { Type } from 'class-transformer';
-import { CreateBookingServiceDto } from 'src/application/booking-service/cqrs';
+// import { Type } from 'class-transformer';
+// import { CreateBookingServiceDto } from 'src/application/booking-service/cqrs';
 
 export class CreateBookingDto {
   @IsNotEmpty()
