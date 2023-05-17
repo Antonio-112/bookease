@@ -86,6 +86,10 @@ export class BookingService {
       duration: 0,
     };
 
+    if (!Array.isArray(services) || services.length > 100) {
+      throw new Error('Invalid services input');
+    }
+
     for (let i = 0; i < services.length; i++) {
       this.logger.debug(`Processing service with id: ${services[i]}`);
       const service = await this.bookingServiceRepo.findById(services[i]);

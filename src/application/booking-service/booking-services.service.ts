@@ -25,7 +25,7 @@ export class BookingServicesService {
   }
 
   async findAll(_query: GetBookingServicesQuery): Promise<BookingServices[]> {
-    this.logger.log('Finding all BookingServices');
+    this.logger.log('Finding all BookingServices' + _query);
     return await this.bookingServiceRepository.findAll();
   }
 
