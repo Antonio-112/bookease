@@ -10,7 +10,19 @@ export class BookingRepository implements IBookingRepository {
   constructor(@InjectModel('Booking') private readonly bookingModel: Model<Booking>) {}
 
   private mapToBookingEntity(doc: any): Booking {
-    return new Booking(doc._id, doc.name, doc.date, doc.hairdresser, doc.status);
+    const entity = new Booking(
+      doc._id,
+      doc.name,
+      doc.date,
+      doc.hairdresser,
+      doc.status,
+      doc.service,
+      doc.price,
+      doc.duration,
+      doc.note,
+      doc.phoneNumber,
+    );
+    return entity;
   }
 
   async create(booking: Booking): Promise<Booking> {
@@ -19,7 +31,12 @@ export class BookingRepository implements IBookingRepository {
       name: booking.name,
       date: booking.date,
       hairdresser: booking.hairdresser,
+      service: booking.service,
       status: booking.status,
+      price: booking.price,
+      duration: booking.duration,
+      note: booking.note,
+      phoneNumber: booking.phoneNumber,
     });
     const savedDoc = await createdBooking.save();
     return this.mapToBookingEntity(savedDoc);
@@ -62,7 +79,7 @@ export class BookingRepository implements IBookingRepository {
     return docs.map(this.mapToBookingEntity);
   }
 
-  // Encuentra citas según el estado (por ejemplo, "confirmed", "pending", "cancelled")
+  // Encuentra citas según el estado (por ejemplo, "CONFIRMED", "PENDING", "CANCELLED")
   async findByStatus(status: string): Promise<Booking[]> {
     status.toUpperCase();
     this.logger.debug('Find by status');

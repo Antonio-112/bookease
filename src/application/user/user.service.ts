@@ -16,10 +16,8 @@ export class UserService {
   constructor(@Inject('IUserRepository') private readonly userRepository: IUserRepository) {}
 
   async create(command: CreateUserCommand): Promise<User> {
-    // Destructuracion
     const { name, email, password } = command.createUserDto;
 
-    // Se crea un nuevo usuario con los datos desetructurados
     const user = new User(null, name, email, password);
 
     this.logger.log(`Creating user: ${JSON.stringify(user)}`);
@@ -27,32 +25,25 @@ export class UserService {
   }
 
   async updatePassword(command: UpdatePasswordCommand): Promise<boolean> {
-    this.logger.log(`Updating password for user ID: ${command.id}`);
+    const { id, oldPassword, newPassword } = command;
+    this.logger.log(`Updating password for user ID: ${id}`);
 
-    // Busca por id el usuario para la actualizacion de la contraseña
-    const user = await this.userRepository.findById(command.id);
-    if (!user) {
-      throw new UserNotFoundException(`User with ID: ${command.id} not found.`);
-    }
-    // Verificar que la contraseña anterior y la dada sean iguales
-    const isTheCorrectPass = await compare(command.oldPassword, user.password);
+    const user = await this.userRepository.findById(id);
+
+    if (!user) throw new UserNotFoundException(`User with ID: ${id} not found.`);
+
+    const isTheCorrectPass = await compare(oldPassword, user.password);
     if (!isTheCorrectPass) {
       this.logger.debug('The given password dont match the old password');
       throw new Error('The given password dont match the old password');
     }
 
-    // Compara si la contraseña nueva es igual a la antigua
-    const isSamePassword = await compare(command.newPassword, user.password);
+    const isSamePassword = await compare(newPassword, user.password);
 
-    if (isSamePassword) {
-      // Error de contraseña no pueden ser iguales
-      throw new Error('New password cannot be the same as the current password.');
-    }
+    if (isSamePassword) throw new Error('New password cannot be the same as the current password.');
 
-    // Hash the new password
-    const hashedPassword = await hash(command.newPassword, 10);
+    const hashedPassword = await hash(newPassword, 10);
 
-    // Update the password using the hashed value
     return await this.userRepository.updatePassword(command.id, hashedPassword);
   }
 

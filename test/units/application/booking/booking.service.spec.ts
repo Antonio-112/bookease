@@ -7,11 +7,29 @@ import { Booking, BookingStatus } from '../../../../src/domain/booking/booking.e
 import { CreateBookingCommand, DeleteBookingCommand } from '../../../../src/application/booking/cqrs/commands';
 import { User } from '../../../../src/domain/user/user.entity';
 import { GetBookingQuery, GetBookingsQuery } from '../../../../src/application/booking/cqrs/queries';
+import { IBookingServiceRepository } from '../../../../src/domain/booking-service/interfaces/booking-service.repository';
+import { ConfigService } from '@nestjs/config';
 
 describe('BookingService', () => {
   let bookingService: BookingService;
   const mockBookingRepository = mock<IBookingRepository>();
   const mockUserRepository = mock<IUserRepository>();
+  const mockBookingServiceRepository = mock<IBookingServiceRepository>();
+
+  const mockConfigService = {
+    get: jest.fn().mockImplementation((key: string) => {
+      switch (key) {
+        case 'ATTENTION_START_TIME':
+          return 9;
+        case 'ATTENTION_END_TIME':
+          return 17;
+        case 'ATTENTION_INTERVAL':
+          return 1;
+        default:
+          return null;
+      }
+    }),
+  };
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -19,6 +37,8 @@ describe('BookingService', () => {
         BookingService,
         { provide: 'IBookingRepository', useValue: mockBookingRepository },
         { provide: 'IUserRepository', useValue: mockUserRepository },
+        { provide: 'IBookingServiceRepository', useValue: mockBookingServiceRepository },
+        { provide: ConfigService, useValue: mockConfigService },
       ],
     }).compile();
 
@@ -30,7 +50,7 @@ describe('BookingService', () => {
   });
 
   describe('isTimeSlotAvailable', () => {
-    it('should return true when time slot is available', async () => {
+    it('debería devolver true cuando el intervalo de tiempo está disponible', async () => {
       const date = new Date();
       date.setHours(10, 0, 0, 0);
       const hairdresser = 'Test Hairdresser';
@@ -43,12 +63,23 @@ describe('BookingService', () => {
       expect(result).toBe(true);
     });
 
-    it('should return false when time slot is not available', async () => {
+    it('debería devolver false cuando el intervalo de tiempo no está disponible', async () => {
       const date = new Date();
       date.setHours(10, 0, 0, 0);
       const hairdresser = 'Test Hairdresser';
 
-      const existingBooking = new Booking('1', 'Test Name', date, hairdresser, BookingStatus.CONFIRMED);
+      const existingBooking = new Booking(
+        '1',
+        'Test Name',
+        date,
+        hairdresser,
+        BookingStatus.CONFIRMED,
+        [],
+        0,
+        0,
+        '',
+        '',
+      );
 
       mockBookingRepository.findByHairdresserAndTimeRange.mockResolvedValue([existingBooking]);
 
@@ -58,9 +89,9 @@ describe('BookingService', () => {
       expect(result).toBe(false);
     });
 
-    it('should return false when time is outside business hours', async () => {
+    it('debería devolver false cuando el horario está fuera del horario comercial', async () => {
       const date = new Date();
-      date.setHours(8, 0, 0, 0); // Before 9 AM
+      date.setHours(8, 0, 0, 0); // Antes de las 9 AM
       const hairdresser = 'Test Hairdresser';
 
       const result = await bookingService.isTimeSlotAvailable(date, hairdresser);
@@ -76,6 +107,11 @@ describe('BookingService', () => {
         date: new Date(),
         hairdresser: 'Test Hairdresser',
         status: BookingStatus.CONFIRMED,
+        price: 0,
+        duration: 0,
+        service: [],
+        note: '',
+        phoneNumber: '',
       };
 
       const user = new User('', 'Test Name', 'test@email.com', 'test-password');
@@ -89,6 +125,11 @@ describe('BookingService', () => {
         createBookingDto.date,
         createBookingDto.hairdresser,
         createBookingDto.status,
+        createBookingDto.service,
+        createBookingDto.price,
+        createBookingDto.duration,
+        createBookingDto.note,
+        createBookingDto.phoneNumber,
       );
 
       jest.spyOn(bookingService, 'isTimeSlotAvailable').mockResolvedValue(true);
@@ -106,8 +147,8 @@ describe('BookingService', () => {
   describe('getBookings', () => {
     it('should return all bookings', async () => {
       const expectedResult: Booking[] = [
-        new Booking('1', 'Test Name 1', new Date(), 'Test Hairdresser', BookingStatus.CONFIRMED),
-        new Booking('2', 'Test Name 2', new Date(), 'Test Hairdresser', BookingStatus.CONFIRMED),
+        new Booking('1', 'Test Name 1', new Date(), 'Test Hairdresser', BookingStatus.CONFIRMED, [], 0, 0, '', ''),
+        new Booking('2', 'Test Name 2', new Date(), 'Test Hairdresser', BookingStatus.CONFIRMED, [], 0, 0, '', ''),
       ];
 
       mockBookingRepository.findAll.mockResolvedValue(expectedResult);
@@ -122,7 +163,18 @@ describe('BookingService', () => {
   describe('getBooking', () => {
     it('should return a booking with the given id', async () => {
       const id = '1';
-      const expectedResult = new Booking(id, 'Test Name', new Date(), 'Test Hairdresser', BookingStatus.CONFIRMED);
+      const expectedResult = new Booking(
+        id,
+        'Test Name',
+        new Date(),
+        'Test Hairdresser',
+        BookingStatus.CONFIRMED,
+        [],
+        0,
+        0,
+        '',
+        '',
+      );
 
       mockBookingRepository.findById.mockResolvedValue(expectedResult);
 
