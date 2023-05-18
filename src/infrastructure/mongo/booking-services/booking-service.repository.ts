@@ -9,8 +9,9 @@ export class BookingServiceRepository implements IBookingServiceRepository {
   private readonly logger = new Logger(BookingServiceRepository.name);
   constructor(@InjectModel('BookingServices') private readonly bookingServiceModel: Model<BookingServices>) {}
 
-  private mapToBookingEntity(doc: BookingServices): BookingServices {
-    return new BookingServices(doc._id ?? '', doc.name, doc.details, doc.duration, doc.price);
+  private mapToBookingEntity(doc: any): BookingServices {
+    this.logger.verbose(JSON.stringify(doc));
+    return new BookingServices(doc._id || '', doc.name, doc.details, doc.duration, doc.price);
   }
 
   async create(booking: BookingServices): Promise<BookingServices> {
