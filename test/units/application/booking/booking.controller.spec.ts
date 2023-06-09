@@ -21,12 +21,10 @@ describe('BookingController', () => {
     hairdresser: 'Test Hairdresser',
     status: BookingStatus.CONFIRMED,
     service: [],
-    price: 0,
-    duration: 0,
     note: '',
     phoneNumber: '',
   };
-  //
+
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [BookingController],

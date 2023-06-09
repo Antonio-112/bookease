@@ -3,8 +3,8 @@ import {
   IsString,
   IsOptional,
   IsEnum,
-  IsNumber,
-  Min,
+  /* IsNumber,
+  Min, */
   IsPhoneNumber,
   ArrayMaxSize,
   ArrayMinSize,
@@ -41,7 +41,7 @@ export class CreateBookingDto {
   @ArrayMaxSize(10)
   service: string[];
 
-  @IsNotEmpty()
+  /* @IsNotEmpty()
   @IsNumber()
   @Min(0)
   price: number;
@@ -49,7 +49,7 @@ export class CreateBookingDto {
   @IsNotEmpty()
   @IsNumber()
   @Min(0)
-  duration: number;
+  duration: number; */
 
   @IsOptional()
   @IsString()

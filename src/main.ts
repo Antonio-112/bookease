@@ -11,7 +11,7 @@ async function bootstrap() {
   const port = configService.get<number>('PORT') || 3000;
 
   app.enableCors({
-    origin: configService.get<string>('CORS_ORIGIN'), // Reemplaza esto con tus dominios permitidos o usa una función para manejar la lógica de origen
+    origin: '*' /* configService.get<string>('CORS_ORIGIN') */, // Reemplaza esto con tus dominios permitidos o usa una función para manejar la lógica de origen
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     allowedHeaders: 'Content-Type, Accept, Authorization',
   });

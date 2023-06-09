@@ -4,9 +4,15 @@ import { IUserRepository } from 'src/domain/user/interfaces/user.repository';
 import { mock } from 'jest-mock-extended';
 import { BookingService } from '../../../../src/application/booking/booking.service';
 import { Booking, BookingStatus } from '../../../../src/domain/booking/booking.entity';
-import { CreateBookingCommand, DeleteBookingCommand } from '../../../../src/application/booking/cqrs/commands';
+import {
+  CreateBookingCommand,
+  DeleteBookingCommand,
+} from '../../../../src/application/booking/cqrs/commands';
 import { User } from '../../../../src/domain/user/user.entity';
-import { GetBookingQuery, GetBookingsQuery } from '../../../../src/application/booking/cqrs/queries';
+import {
+  GetBookingQuery,
+  GetBookingsQuery,
+} from '../../../../src/application/booking/cqrs/queries';
 import { IBookingServiceRepository } from '../../../../src/domain/booking-service/interfaces/booking-service.repository';
 import { ConfigService } from '@nestjs/config';
 
@@ -147,8 +153,30 @@ describe('BookingService', () => {
   describe('getBookings', () => {
     it('should return all bookings', async () => {
       const expectedResult: Booking[] = [
-        new Booking('1', 'Test Name 1', new Date(), 'Test Hairdresser', BookingStatus.CONFIRMED, [], 0, 0, '', ''),
-        new Booking('2', 'Test Name 2', new Date(), 'Test Hairdresser', BookingStatus.CONFIRMED, [], 0, 0, '', ''),
+        new Booking(
+          '1',
+          'Test Name 1',
+          new Date(),
+          'Test Hairdresser',
+          BookingStatus.CONFIRMED,
+          [],
+          0,
+          0,
+          '',
+          '',
+        ),
+        new Booking(
+          '2',
+          'Test Name 2',
+          new Date(),
+          'Test Hairdresser',
+          BookingStatus.CONFIRMED,
+          [],
+          0,
+          0,
+          '',
+          '',
+        ),
       ];
 
       mockBookingRepository.findAll.mockResolvedValue(expectedResult);

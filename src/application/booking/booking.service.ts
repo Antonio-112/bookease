@@ -80,15 +80,16 @@ export class BookingService {
     return false;
   }
 
-  async calculatePriceAndDuration(services: string[]): Promise<{ price: number; duration: number }> {
+  async calculatePriceAndDuration(
+    services: string[],
+  ): Promise<{ price: number; duration: number }> {
     const data = {
       price: 0,
       duration: 0,
     };
 
-    if (!Array.isArray(services) || services.length > 100) {
+    if (!Array.isArray(services) || services.length > 100)
       throw new Error('Invalid services input');
-    }
 
     for (let i = 0; i < services.length; i++) {
       this.logger.debug(`Processing service with id: ${services[i]}`);
@@ -109,28 +110,35 @@ export class BookingService {
   }
 
   async createBooking(command: CreateBookingCommand): Promise<Booking> {
-    const { name, date, hairdresser, status, note, phoneNumber, service } = command.createBookingDto;
+    const { name, date, hairdresser, status, note, phoneNumber, service } =
+      command.createBookingDto;
 
     const user = await this.userRepository.findByName(name);
-    if (!user) {
-      throw new Error('User not found');
-    }
 
-    if (!(await this.isTimeSlotAvailable(date, hairdresser))) {
-      throw new Error('Time slot is not available');
-    }
+    if (!user) throw new Error('User not found');
+    if (!this.isTimeSlotAvailable(date, hairdresser)) throw new Error('Time slot is not available');
 
     const { price, duration } = await this.calculatePriceAndDuration(service);
-
     this.logger.debug(`Calculated price: ${price}, duration: ${duration}`);
 
-    const booking = new Booking(null, name, date, hairdresser, status, service, price, duration, note, phoneNumber);
+    const booking = new Booking(
+      null,
+      name,
+      date,
+      hairdresser,
+      status,
+      service,
+      price,
+      duration,
+      note,
+      phoneNumber,
+    );
 
     this.logger.debug(`Creating a booking with data: ${JSON.stringify(command.createBookingDto)}`);
     return this.bookingRepository.create(booking);
   }
 
-  async getBookings(query: GetBookingsQuery): Promise<Booking[]> {
+  async getBookings(_query: GetBookingsQuery): Promise<Booking[]> {
     this.logger.debug('Fetching all bookings');
     return this.bookingRepository.findAll();
   }
@@ -141,12 +149,19 @@ export class BookingService {
   }
 
   async updateBooking(command: UpdateBookingCommand): Promise<Booking> {
-    this.logger.debug(`Updating booking with ID: ${command.id} and data: ${JSON.stringify(command.updateBookingDto)}`);
+    this.logger.debug(
+      `Updating booking with ID: ${command.id} and data: ${JSON.stringify(
+        command.updateBookingDto,
+      )}`,
+    );
 
-    const { name, date, hairdresser, status, duration, note, phoneNumber, price, service } = command.updateBookingDto;
+    const { name, date, hairdresser, status, duration, note, phoneNumber, price, service } =
+      command.updateBookingDto;
     const user = await this.userRepository.findByName(command.updateBookingDto.name);
+
     if (!user) throw new Error('User not found');
-    if (!(await this.isTimeSlotAvailable(date, hairdresser))) throw new Error('Time slot is not available');
+    if (!(await this.isTimeSlotAvailable(date, hairdresser)))
+      throw new Error('Time slot is not available');
 
     const booking = new Booking(
       command.id,
@@ -168,14 +183,18 @@ export class BookingService {
     this.logger.debug(`Deleting booking with ID: ${command.id}`);
     return this.bookingRepository.delete(command.id);
   }
+
   async updateBookingStatus(command: UpdateBookingStatusCommand): Promise<Booking> {
-    this.logger.debug(`Updating booking with ID: ${command.id} to status: ${command.status.status}`);
+    this.logger.debug(
+      `Updating booking with ID: ${command.id} to status: ${command.status.status}`,
+    );
     return this.bookingRepository.updateStatus(command.id, command.status.status);
   }
 
   async findByTimeRange(query: GetBookingByTimeRangeQuery): Promise<Booking[]> {
     return this.bookingRepository.findByTimeRange(query.startTime, query.endTime);
   }
+
   async findByStatus(query: GetBookingByStatusQuery): Promise<Booking[]> {
     return this.bookingRepository.findByStatus(query.status);
   }

@@ -7,10 +7,12 @@ import { BookingServices } from '../../../domain/booking-service/booking-service
 @Injectable()
 export class BookingServiceRepository implements IBookingServiceRepository {
   private readonly logger = new Logger(BookingServiceRepository.name);
-  constructor(@InjectModel('BookingServices') private readonly bookingServiceModel: Model<BookingServices>) {}
+  constructor(
+    @InjectModel('BookingServices') private readonly bookingServiceModel: Model<BookingServices>,
+  ) {}
 
-  private mapToBookingEntity(doc: BookingServices): BookingServices {
-    return new BookingServices(doc._id ?? '', doc.name, doc.details, doc.duration, doc.price);
+  private mapToBookingEntity(doc: any): BookingServices {
+    return new BookingServices(doc._id || '', doc.name, doc.details, doc.duration, doc.price);
   }
 
   async create(booking: BookingServices): Promise<BookingServices> {
