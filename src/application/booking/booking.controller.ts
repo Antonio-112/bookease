@@ -18,6 +18,7 @@ export class BookingController {
   @Post()
   async createBooking(@Body() createBookingDto: CreateBookingDto) {
     this.logger.log('Creating a booking');
+
     const command = new CreateBookingCommand(createBookingDto);
     return await this.bookingService.createBooking(command);
   }
@@ -25,6 +26,7 @@ export class BookingController {
   @Get()
   async getBookings() {
     this.logger.log('Getting all bookings');
+
     const query = new GetBookingsQuery();
     return await this.bookingService.getBookings(query);
   }
@@ -32,12 +34,14 @@ export class BookingController {
   @Get(':id')
   async getBooking(@Param('id') id: string) {
     this.logger.log(`Getting booking with id ${id}`);
+
     const query = new GetBookingQuery(id);
     return await this.bookingService.getBooking(query);
   }
 
   @Get('status/:status')
   async getBookingByStatus(@Param('status') status: string) {
+    this.logger.log('Getting book by status with status: ' + status);
     const query = new GetBookingByStatusQuery(status);
     return await this.bookingService.findByStatus(query);
   }
@@ -45,13 +49,18 @@ export class BookingController {
   @Put(':id')
   async updateBooking(@Param('id') id: string, @Body() updateBookingDto: UpdateBookingDto) {
     this.logger.log(`Updating booking with id ${id}`);
+
     const command = new UpdateBookingCommand(id, updateBookingDto);
     return await this.bookingService.updateBooking(command);
   }
 
   @Put(':id/status')
-  async updateBookingStatus(@Param('id') id: string, @Body() updateBookingDto: UpdateBookingStatusDto) {
+  async updateBookingStatus(
+    @Param('id') id: string,
+    @Body() updateBookingDto: UpdateBookingStatusDto,
+  ) {
     this.logger.log(`Updating booking with id ${id}`);
+
     const command = new UpdateBookingStatusCommand(id, updateBookingDto);
     return await this.bookingService.updateBookingStatus(command);
   }
@@ -59,6 +68,7 @@ export class BookingController {
   @Delete(':id')
   async deleteBooking(@Param('id') id: string) {
     this.logger.log(`Deleting booking with id ${id}`);
+
     const command = new DeleteBookingCommand(id);
     return await this.bookingService.deleteBooking(command);
   }

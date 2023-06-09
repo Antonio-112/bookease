@@ -1,6 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Types } from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 import { BookingService } from '../booking-services/booking-service.schema';
+
+export type BookingDocument = Booking & Document;
 
 @Schema()
 export class Booking {
@@ -36,3 +38,5 @@ export class Booking {
 }
 
 export const BookingSchema = SchemaFactory.createForClass(Booking);
+
+export const BookingModel = mongoose.model<BookingDocument>('Booking', BookingSchema);

@@ -1,17 +1,37 @@
-import { Controller, Get, Post, Body, Param, Put, Delete, Patch, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Put,
+  Delete,
+  Patch,
+  UseGuards,
+  Logger,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from '../../domain/user/user.entity';
 import { GetUserQuery, GetUsersQuery } from './cqrs/queries';
 import { CreateUserDto, UpdatePasswordDto, UpdateUserDto } from './cqrs/dtos';
-import { CreateUserCommand, DeleteUserCommand, UpdatePasswordCommand, UpdateUserCommand } from './cqrs/commands';
+import {
+  CreateUserCommand,
+  DeleteUserCommand,
+  UpdatePasswordCommand,
+  UpdateUserCommand,
+} from './cqrs/commands';
 import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
 
 @Controller('users')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  private logger: Logger;
+  constructor(private readonly userService: UserService) {
+    this.logger = new Logger(UserController.name);
+  }
 
   @Post()
   async create(@Body() user: CreateUserDto): Promise<User> {
+    this.logger.log('Creating booking');
     const command = new CreateUserCommand(user);
     return this.userService.create(command);
   }
@@ -42,7 +62,10 @@ export class UserController {
 
   @Patch('password/:id')
   @UseGuards(JwtAuthGuard)
-  async updatePassword(@Param('id') id: string, @Body() updatePasswordDto: UpdatePasswordDto): Promise<boolean> {
+  async updatePassword(
+    @Param('id') id: string,
+    @Body() updatePasswordDto: UpdatePasswordDto,
+  ): Promise<boolean> {
     const { oldPassword, newPassword } = updatePasswordDto;
     const command = new UpdatePasswordCommand(id, newPassword, oldPassword);
     return this.userService.updatePassword(command);

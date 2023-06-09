@@ -27,21 +27,27 @@ export class BookingServicesService {
 
   async findAll(_query: GetBookingServicesQuery): Promise<BookingServices[]> {
     this.logger.log('Finding all BookingServices' + _query);
+
     return await this.bookingServiceRepository.findAll();
   }
 
   async findById(query: GetBookingServiceQuery): Promise<BookingServices> {
     this.logger.log(`Finding BookingService by ID: ${query.id}`);
+
     return await this.bookingServiceRepository.findById(query.id);
   }
 
   async update(command: UpdateBookingServiceCommand): Promise<BookingServices> {
+    this.logger.log('Updating BookingService with id: ' + command.id);
+
     const { name, details, duration, price } = command.updateBookingService;
     const bookingService = new BookingServices(command.id, name, details, duration, price);
     return await this.bookingServiceRepository.update(command.id, bookingService);
   }
 
   async delete(command: DeleteBookingServiceCommand): Promise<boolean> {
-    return await this.bookingServiceRepository.delete(command.id);
+    const id = command.id;
+    this.logger.log('Deleting BookingService by id:' + id);
+    return await this.bookingServiceRepository.delete(id);
   }
 }

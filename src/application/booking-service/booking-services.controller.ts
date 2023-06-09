@@ -20,6 +20,7 @@ export class BookingServiceController {
   @Post()
   async create(@Body() BookingService: CreateBookingServiceDto): Promise<BookingServices> {
     this.logger.log(`Creating a new booking service with data: ${JSON.stringify(BookingService)}`);
+
     const command = new CreateBookingServiceCommand(BookingService);
     return this.bookingService.create(command);
   }
@@ -27,6 +28,7 @@ export class BookingServiceController {
   @Get()
   async findAll(): Promise<BookingServices[]> {
     this.logger.log('Getting all booking services');
+
     const query = new GetBookingServicesQuery();
     return this.bookingService.findAll(query);
   }
@@ -34,6 +36,7 @@ export class BookingServiceController {
   @Get(':id')
   async findById(@Param('id') id: string): Promise<BookingServices> {
     this.logger.log(`Getting booking service by id: ${id}`);
+
     const query = new GetBookingServiceQuery(id);
     return this.bookingService.findById(query);
   }
@@ -46,6 +49,7 @@ export class BookingServiceController {
     this.logger.log(
       `Updating booking service with id: ${id} with data: ${JSON.stringify(bookingService)}`,
     );
+
     const command = new UpdateBookingServiceCommand(id, bookingService);
     return this.bookingService.update(command);
   }
@@ -53,6 +57,7 @@ export class BookingServiceController {
   @Delete(':id')
   async delete(@Param('id') id: string): Promise<boolean> {
     this.logger.log(`Deleting booking service with id: ${id}`);
+
     const command = new DeleteBookingServiceCommand(id);
     return this.bookingService.delete(command);
   }
