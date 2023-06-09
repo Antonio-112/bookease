@@ -7,10 +7,11 @@ import { BookingServices } from '../../../domain/booking-service/booking-service
 @Injectable()
 export class BookingServiceRepository implements IBookingServiceRepository {
   private readonly logger = new Logger(BookingServiceRepository.name);
-  constructor(@InjectModel('BookingServices') private readonly bookingServiceModel: Model<BookingServices>) {}
+  constructor(
+    @InjectModel('BookingServices') private readonly bookingServiceModel: Model<BookingServices>,
+  ) {}
 
   private mapToBookingEntity(doc: any): BookingServices {
-    this.logger.verbose(JSON.stringify(doc));
     return new BookingServices(doc._id || '', doc.name, doc.details, doc.duration, doc.price);
   }
 

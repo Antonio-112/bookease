@@ -39,8 +39,13 @@ export class BookingServiceController {
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() bookingService: UpdateBookingServiceDto): Promise<BookingServices> {
-    this.logger.log(`Updating booking service with id: ${id} with data: ${JSON.stringify(bookingService)}`);
+  async update(
+    @Param('id') id: string,
+    @Body() bookingService: UpdateBookingServiceDto,
+  ): Promise<BookingServices> {
+    this.logger.log(
+      `Updating booking service with id: ${id} with data: ${JSON.stringify(bookingService)}`,
+    );
     const command = new UpdateBookingServiceCommand(id, bookingService);
     return this.bookingService.update(command);
   }

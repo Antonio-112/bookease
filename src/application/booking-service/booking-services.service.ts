@@ -13,7 +13,8 @@ export class BookingServicesService {
   private readonly logger = new Logger(BookingServicesService.name);
 
   constructor(
-    @Inject('IBookingServiceRepository') private readonly bookingServiceRepository: IBookingServiceRepository,
+    @Inject('IBookingServiceRepository')
+    private readonly bookingServiceRepository: IBookingServiceRepository,
   ) {}
 
   async create(command: CreateBookingServiceCommand): Promise<BookingServices> {
